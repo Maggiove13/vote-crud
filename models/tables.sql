@@ -7,6 +7,12 @@ CREATE TABLE `world`.`users` (
     PRIMARY KEY (`id`),
     UNIQUE INDEX `user_name_UNIQUE` (`user_name` ASC) VISIBLE);
 
+    ALTER TABLE `world`.`users` 
+    ADD COLUMN `password` VARCHAR(255) NOT NULL AFTER `user_name`,
+    ADD COLUMN `email` VARCHAR(255) NOT NULL AFTER `password`,
+    ADD UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE;
+    ;
+
 
 -- Table Series
     ALTER TABLE `world`.`series` 
