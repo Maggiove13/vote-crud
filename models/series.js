@@ -10,7 +10,7 @@ exports.queryToInsertSeriesName = async (title, description) => {
     try{
         await pool.execute(query, [title, description]);
     } catch(error){
-        console.log("Error:", error);
+        console.log("Error: Inserting data to the series table", error);
     }
 }
 
