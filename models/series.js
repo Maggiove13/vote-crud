@@ -25,3 +25,14 @@ exports.queryVerifySeriesTitle = async (title) => {
         console.log("Error:", error);
     }
 }
+
+
+exports.queryInsertIntoSeriesUrl = async (url) => {
+    const query = 'INSERT INTO series where url = ?';
+    try{
+
+    } catch(error){
+        console.log("Error inserting the url");
+        console.log("Error", error);
+    }
+}
