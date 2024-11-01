@@ -26,13 +26,6 @@ CREATE TABLE `world`.`users` (
         ALTER TABLE `world`.`series` 
     ADD COLUMN `season_id` INT NOT NULL AFTER `user_id`,
     ADD INDEX `season_id_idx` (`season_id` ASC) VISIBLE;
-    ;
-    ALTER TABLE `world`.`series` 
-    ADD CONSTRAINT `season_id`
-    FOREIGN KEY (`season_id`)
-    REFERENCES `world`.`seasons` (`id`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE;
 
 
 
