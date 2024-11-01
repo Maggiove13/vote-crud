@@ -38,14 +38,14 @@ exports.queryToGetAllTitles = async () => {
 }
 
 
-exports.queryInsertIntoSeriesUrl = async (url) => {
-    const query = 'INSERT INTO series where url = ?';
+exports.queryInsertIntoSeriesUrl = async (serie_id, url) => {
+    const query = 'INSERT INTO series url = ?, WHERE id = ?';
     try{
-        const insert = await pool.execute(query, [url]);
-        return insert;
+        const [result] = await pool.execute(query, [serie_id, url]);
+        console.log("url inserted correctly");
+        return result;
     } catch(error){
-        console.log("Error inserting the url");
-        console.log("Error", error);
+        console.log("Error inserting the url", error);
     }
 }
 
