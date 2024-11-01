@@ -50,11 +50,12 @@ exports.queryInsertIntoSeriesUrl = async (url) => {
 }
 
 // Para agregar los votos del usuario a la tabla
-exports.queryVoteCount = async (vote_count) => {
-    const query = 'INSERT INTO series WHERE vote_count = ?';
+exports.queryVoteCount = async (serie_id) => {
+    const query = 'UPDATE series SET vote_count =  vote_count + 1 WHERE id = ?';
     try{
-        await pool.execute(query, [vote_count]++);
+        await pool.execute(query, [serie_id]);
+        console.log("Vote count incremented succesfully");
     } catch (error) {
-        console.log("Error inserting the vote into the table", error);
+        console.log("Error updating the vote count", error);
     }
 }
