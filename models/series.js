@@ -27,6 +27,17 @@ exports.queryVerifySeriesTitle = async (title) => {
 }
 
 
+exports.queryToGetAllTitles = async () => {
+    const query = 'SELECT * FROM series WHERE titles = ?';
+
+    try{
+        await pool.execute(query, [titles]);
+    } catch(error){
+        console.log("Error getting the data from the database", error);
+    }
+}
+
+
 exports.queryInsertIntoSeriesUrl = async (url) => {
     const query = 'INSERT INTO series where url = ?';
     try{
