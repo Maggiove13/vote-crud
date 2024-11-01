@@ -66,7 +66,7 @@ exports.queryDeleteSerie = async (serie_id, user_id) => {
 
     try{
         const [response] = await pool.execute(query, [serie_id, user_id]);
-        console.log("serie_id, deleted");
+        console.log("Serie deleted successfully");
         return response;
     } catch (error){
         console.log("Error deleting the series", error);
