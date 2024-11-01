@@ -5,10 +5,10 @@ const pool = require("../config/config.js");
 checkDatabaseConnection();
 
 exports.queryToInsertSeriesName = async (title, description) => {
-    const query = 'INSERT INTO series (title, description)= ?, ?';
-
-    try{
+    const query = 'INSERT INTO series (title, description) VALUES (?, ?)';
+    try {
         await pool.execute(query, [title, description]);
+        console.log("Series inserted successfully.");
     } catch(error){
         console.log("Error: Inserting data to the series table", error);
     }
@@ -49,3 +49,12 @@ exports.queryInsertIntoSeriesUrl = async (url) => {
     }
 }
 
+// Para agregar los votos del usuario a la tabla
+exports.queryVoteCount = async (vote_count) => {
+    const query = 'INSERT INTO series WHERE vote_count = ?';
+    try{
+        await pool.execute(query, [vote_count]++);
+    } catch (error) {
+        console.log("Error inserting the vote into the table", error);
+    }
+}
