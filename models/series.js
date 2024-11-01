@@ -30,9 +30,11 @@ exports.queryVerifySeriesTitle = async (title) => {
 exports.queryInsertIntoSeriesUrl = async (url) => {
     const query = 'INSERT INTO series where url = ?';
     try{
-
+        const insert = await pool.execute(query, [url]);
+        return insert;
     } catch(error){
         console.log("Error inserting the url");
         console.log("Error", error);
     }
 }
+
