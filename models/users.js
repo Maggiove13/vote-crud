@@ -20,8 +20,8 @@ exports.queryToVerifyUser = async(email) => {
     const query = 'SELECT * FROM users WHERE email = ?';
 
     try{
-        q = await pool.execute(query, [email]);
-        return q;
+        cont [ response ] = await pool.execute(query, [email]);
+        return response;
     } catch(error){
         console.log("Error:", error);
     }
