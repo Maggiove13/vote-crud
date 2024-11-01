@@ -23,6 +23,19 @@ CREATE TABLE `world`.`users` (
     ON UPDATE NO ACTION;
 
 
+        ALTER TABLE `world`.`series` 
+    ADD COLUMN `season_id` INT NOT NULL AFTER `user_id`,
+    ADD INDEX `season_id_idx` (`season_id` ASC) VISIBLE;
+    ;
+    ALTER TABLE `world`.`series` 
+    ADD CONSTRAINT `season_id`
+    FOREIGN KEY (`season_id`)
+    REFERENCES `world`.`seasons` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE;
+
+
+
 -- Table Seasons
 CREATE TABLE `world`.`seasons` (
     `id` INT NOT NULL AUTO_INCREMENT,
@@ -43,3 +56,6 @@ CREATE TABLE `world`.`seasons` (
         REFERENCES `world`.`series` (`id`)
         ON DELETE CASCADE
         ON UPDATE CASCADE);
+
+    ALTER TABLE `world`.`seasons` 
+    ADD COLUMN `link_serie` VARCHAR(255) NULL AFTER `serie_id`;
