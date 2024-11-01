@@ -4,10 +4,10 @@ const pool = require("../config/config.js");
 
 checkDatabaseConnection();
 
-exports.queryToInsertSeriesName = async (title, description) => {
-    const query = 'INSERT INTO series (title, description) VALUES (?, ?)';
+exports.queryToInsertSeriesName = async (title, description, user_id) => {
+    const query = 'INSERT INTO series (title, description, user_id) VALUES (?, ?, ?)';
     try {
-        await pool.execute(query, [title, description]);
+        await pool.execute(query, [title, description, user_id]);
         console.log("Series inserted successfully.");
     } catch(error){
         console.log("Error: Inserting data to the series table", error);
@@ -27,10 +27,10 @@ exports.queryVerifySeriesTitle = async (title) => {
 
 
 exports.queryToGetAllTitles = async () => {
-    const query = 'SELECT * FROM series WHERE titles = ?';
+    const query = 'SELECT title FROM series';
 
     try{
-        await pool.execute(query, [titles]);
+        await pool.execute(query);
     } catch(error){
         console.log("Error getting the data from the database", error);
     }
