@@ -59,3 +59,16 @@ exports.queryVoteCount = async (serie_id) => {
         console.log("Error updating the vote count", error);
     }
 }
+
+// Para que un usuario pueda eliminar un id de una tabla
+exports.queryDeleteSerie = async (serie_id, user_id) => {
+    const query = 'DELECTE FROM series WHERE id= ?, AND user_id = ?';
+
+    try{
+        const [response] = await pool.execute(query, [serie_id, user_id]);
+        console.log("serie_id, deleted");
+        return response;
+    } catch (error){
+        console.log("Error deleting the series", error);
+    }
+}
