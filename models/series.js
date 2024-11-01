@@ -30,7 +30,8 @@ exports.queryToGetAllTitles = async () => {
     const query = 'SELECT title FROM series';
 
     try{
-        await pool.execute(query);
+        const [response] = await pool.execute(query);
+        return response;
     } catch(error){
         console.log("Error getting the data from the database", error);
     }
