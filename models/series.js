@@ -63,6 +63,18 @@ exports.queryDeleteLink = async (link, serie_id) => {
 }
 
 
+// Para ponerle otro link
+exports.queryUpdateLink = async (link, serie_id) => {
+    const query = 'UPDATE series SET link_url = ? WHERE id = ?';
+    try{
+        const [result] = await pool.execute(query, [link, serie_id]);
+        console.log("Link updated successfully.");
+        return result;
+    } catch(error){
+        console.log("Error updating the link", error);
+    }
+}
+
 
 // Para agregar los votos del usuario a la tabla
 exports.queryVoteCount = async (serie_id) => {
