@@ -5,7 +5,7 @@ checkDatabaseConnection();
 
 
 exports.queryToCreateASeason = async (id_serie, user_id, season_name) => {
-    const query = 'INSERT INTO seasons (serie_id, user_id, season_name) VALUES = ?, ?, ?';
+    const query = 'INSERT INTO seasons (serie_id, user_id, season_name) VALUES (?, ?, ?)';
 
     try{
         const [response] = await pool.execute(query, [id_serie, user_id, season_name]);
