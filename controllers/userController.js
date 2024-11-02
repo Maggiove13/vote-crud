@@ -1,7 +1,7 @@
 const { queryToInsertUser, queryToVerifyUser, queryGetUserId } = require("../models/users");
 
 
-exports.createUser = async (req, res) => {
+exports.registerUser = async (req, res) => {
     const { user_name, email, password } = req.body; 
 
         if (!user_name || !email || !password){
