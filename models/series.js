@@ -18,8 +18,8 @@ exports.queryToInsertSeriesName = async (title, description, user_id) => {
 exports.queryVerifySeriesTitle = async (title) => {
     const query = 'SELECT title FROM series WHERE title = ?';
     try{
-        const [rows] = await pool.execute(query, [title]);
-        return rows; // Devuelve directamente las filas de los datos
+        const [response] = await pool.execute(query, [title]);
+        return response; 
     } catch(error){
         console.log("Error retriving data", error);
     }
