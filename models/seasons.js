@@ -43,3 +43,17 @@ exports.queryUpdateSeason = async (season_name, season_id, serie_id, user_id) =>
         console.log("Error deleting the season", error);
     }
 }
+
+
+//Para que el usuario pueda actualizar el nombre de una season
+exports.queryGetSeasonsFromSerie = async (serie_id) => {
+    const query = 'SELECT * FROM seasons WHERE serie_id = ?'
+
+    try {
+        const [response] = await pool.execute(query, [serie_id]);
+        console.log("All seasons retrieved correctly");
+        return response;
+    } catch(error) {
+        console.log("Error retrieving data from seasons table", error);
+    }
+}
