@@ -29,3 +29,17 @@ exports.queryDeleteSeason = async (season_id, serie_id, user_id) => {
         console.log("Error deleting the season", error);
     }
 }
+
+
+//Para que el usuario pueda actualizar el nombre de una season
+exports.queryUpdateSeason = async (season_name, season_id, serie_id, user_id) => {
+    const query = 'UPDATE seasons SET season_name = ? WHERE id = ? AND serie_id = ? AND user_id = ?'
+
+    try {
+        const [response] = await pool.execute(query, [season_name, season_id, serie_id, user_id]);
+        console.log("Season name, successfully deleted");
+        return response;
+    } catch(error) {
+        console.log("Error deleting the season", error);
+    }
+}
