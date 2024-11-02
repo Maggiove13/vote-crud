@@ -20,16 +20,23 @@ exports.registerUser = async (req, res) => {
 }
 
 
-exports.VerifyUser = async (req, res) => {
-    const { email } = req.body 
+
+exports.getUserId = async (req, res, user_name) => {
 
     try{
-        result = await queryToVerifyUser(email);
-        if (result.lenght > 0){
-            res.status(400).send({status: "Error", message: "This user already exists"});
+        if (!user_name){
+            console.log("user_name not found");
+            return res.status(400).send({status: "Error", message: "user_name dont found"});
         }
-    }catch(error){
-        res.status(500).send({message: "Internal server error"});
-        console.log("Error verifying the email", error);
+
+        result = await queryGetUserId(user_name);
+        if (result.lenght > 0){
+            const user_id_res = result[0].id
+            res.status(200).send({message: "Successfully retrieving the user_id", user_id: user_id_res});
+            console.log(`The user_id from ${user_name} is: ${user_id_res}`);
+        }
+    } catch(error){
+        console.log("Error obtaining the user id");
+        res.status(500).send({status: "Error", message: "Internal server error"});
     }
 }
