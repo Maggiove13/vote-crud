@@ -1,12 +1,12 @@
 const express = require("express");
 const dotenv = require("dotenv");
+const router = require("./routes/routes.js");
 
 dotenv.config()
 
 const app = express();
 
 app.use(express.json());
-
 
 
 
