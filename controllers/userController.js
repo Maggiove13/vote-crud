@@ -18,3 +18,18 @@ exports.registerUser = async (req, res) => {
         console.log("Error creating user", error);
     }
 }
+
+
+exports.VerifyUser = async (req, res) => {
+    const { email } = req.body 
+
+    try{
+        result = await queryToVerifyUser(email);
+        if (result.lenght > 0){
+            res.status(400).send({status: "Error", message: "This user already exists"});
+        }
+    }catch(error){
+        res.status(500).send({message: "Internal server error"});
+        console.log("Error verifying the email", error);
+    }
+}
