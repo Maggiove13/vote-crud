@@ -4,7 +4,7 @@ const pool = require("../config/config.js");
 checkDatabaseConnection();
 
 
-exports.queryToCreateASeasonTheme = async (id_serie, user_id, season_name) => {
+exports.queryToCreateASeason = async (id_serie, user_id, season_name) => {
     const query = 'INSERT INTO seasons (serie_id, user_id, season_name) VALUES = ?, ?, ?';
 
     try{
@@ -13,5 +13,19 @@ exports.queryToCreateASeasonTheme = async (id_serie, user_id, season_name) => {
         return response;
     } catch (error) {
         console.log("Data could not be inserted. Error:", error);
+    }
+}
+
+
+//Para que el usuario pueda eliminar una season 
+exports.queryDeleteSeason = async (season_id, serie_id, user_id) => {
+    const query = 'DELETE FROM seasons WHERE id = ? AND serie_id = ? AND user_id = ?'
+
+    try {
+        const [response] = await pool.execute(query, [season_id, serie_id, user_id]);
+        console.log("Season successfully deleted");
+        return response;
+    } catch(error) {
+        console.log("Error deleting the season", error);
     }
 }
