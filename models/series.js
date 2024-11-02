@@ -51,14 +51,14 @@ exports.queryInsertIntoSeriesUrl = async (serie_id, url) => {
 
 
 // Para eliminar el link
-exports.queryUpdateSerieUrl = async (link, serie_id) => {
+exports.queryDeleteLink = async (link, serie_id) => {
     const query = 'UPDATE series SET link_url = NULL WHERE id = ?';
     try{
         const [result] = await pool.execute(query, [link, serie_id]);
-        console.log("URL updating successfully.");
+        console.log("Link deleted successfully.");
         return result;
     } catch(error){
-        console.log("Error deleting the url", error);
+        console.log("Error deleting the link", error);
     }
 }
 
