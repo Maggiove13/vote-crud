@@ -57,3 +57,15 @@ exports.queryGetSeasonsFromSerie = async (serie_id) => {
         console.log("Error retrieving data from seasons table", error);
     }
 }
+
+
+// Para agregar los votos del usuario a la tabla
+exports.queryVoteCountSeasons = async (season_id) => {
+    const query = 'UPDATE series SET vote_count =  vote_count + 1 WHERE id = ?';
+    try{
+        await pool.execute(query, [season_id]);
+        console.log("Vote count incremented successfully in seasons");
+    } catch (error) {
+        console.log("Error updating the vote count in seasons", error);
+    }
+}
