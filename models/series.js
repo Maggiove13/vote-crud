@@ -38,6 +38,34 @@ exports.queryToGetAllTitles = async () => {
 }
 
 
+// Para que un usuario pueda eliminar un id de una tabla
+exports.queryDeleteSerie = async (serie_id, user_id) => {
+    const query = 'DELETE FROM series WHERE id= ?, AND user_id = ?';
+
+    try{
+        const [response] = await pool.execute(query, [serie_id, user_id]);
+        console.log("Serie deleted successfully");
+        return response;
+    } catch (error){
+        console.log("Error deleting the series", error);
+    }
+}
+
+
+// Para que un usuario pueda actualizar el nombre de una serie
+exports.queryUpdateSerie = async (title, description, serie_id, user_id) => {
+    const query = 'UPDATE series SET title = ?, description = ? WHERE id = ? AND user_id = ?';
+
+    try{
+        const [response] = await pool.execute(query, [title, description, serie_id, user_id]);
+        console.log("Serie title, and description updated successfully");
+        return response;
+    } catch (error){
+        console.log("Error deleting the series", error);
+    }
+}
+
+
 exports.queryInsertIntoSeriesUrl = async (serie_id, url) => {
     const query = 'INSERT INTO series url = ?, WHERE id = ?';
     try{
@@ -84,18 +112,5 @@ exports.queryVoteCount = async (serie_id) => {
         console.log("Vote count incremented succesfully");
     } catch (error) {
         console.log("Error updating the vote count", error);
-    }
-}
-
-// Para que un usuario pueda eliminar un id de una tabla
-exports.queryDeleteSerie = async (serie_id, user_id) => {
-    const query = 'DELECTE FROM series WHERE id= ?, AND user_id = ?';
-
-    try{
-        const [response] = await pool.execute(query, [serie_id, user_id]);
-        console.log("Serie deleted successfully");
-        return response;
-    } catch (error){
-        console.log("Error deleting the series", error);
     }
 }
