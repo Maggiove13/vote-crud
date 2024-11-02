@@ -9,8 +9,14 @@ exports.registerUser = async (req, res) => {
         }
 
     try{
-
+        const existingUser = await queryToVerifyUser(email);
+        if (existingUser.length > 0){
+            console.log("This user already exists");
+            return res.status(400).send({status: "Bad requests", message: "This user already exists"});
+        }
+        
         await queryToInsertUser(user_name, password, email);
+            console.log("User successfully created");
             return res.status(201).send({message: "User successfully created"})
 
     } catch(error){
