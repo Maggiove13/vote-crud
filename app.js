@@ -5,8 +5,12 @@ dotenv.config()
 
 const app = express();
 
-const port = process.env.PORT;
+app.use(express.json());
 
+
+
+
+const port = process.env.PORT;
 app.listen(port, () => {
     console.log(`Server running in port: ${port}`);
 });
