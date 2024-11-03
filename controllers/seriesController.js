@@ -38,3 +38,24 @@ exports.insertSerie = async (req, res) => {
         res.status(500).send({message: "Internal server error"});
     }
 }
+
+
+
+exports.getAllSeries = async (res, req) => {
+    try{
+        const responseAllSeries = await queryToGetAllTitles();
+
+        if (responseAllSeries.length > 0){
+            console.log("Series retrieved:", responseAllSeries);
+            return res.status(200).send({
+                message: "Successfully retrieved all the series", 
+                data: responseAllSeries
+            })
+        } else {
+            return res.status(404).send({message: "No series found"});
+        }
+    } catch(error){
+        console.log("Error fetching all the series data:", error);
+        return res.status(500).send({message: "Internal server error"});
+    }
+}
