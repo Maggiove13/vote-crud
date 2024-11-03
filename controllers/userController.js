@@ -11,8 +11,8 @@ exports.registerUser = async (req, res) => {
     try{
         const existingUser = await queryToVerifyUser(email);
         if (existingUser.length > 0){
-            console.log("This user already exists");
-            return res.status(400).send({status: "Bad requests", message: "This user already exists"});
+            console.log("This email is already registered");
+            return res.status(400).send({status: "Bad requests", message: "This email is already registered"});
         }
         
         await queryToInsertUser(user_name, password, email);
