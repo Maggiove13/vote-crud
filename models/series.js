@@ -7,8 +7,9 @@ checkDatabaseConnection();
 exports.queryToInsertSeriesName = async (title, description, user_id) => {
     const query = 'INSERT INTO series (title, description, user_id) VALUES (?, ?, ?)';
     try {
-        await pool.execute(query, [title, description, user_id]);
+        const [ result ] = await pool.execute(query, [title, description, user_id]);
         console.log("Series inserted successfully.");
+        return result;
     } catch(error){
         console.log("Error: Inserting data to the series table", error);
     }
