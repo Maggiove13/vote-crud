@@ -50,7 +50,8 @@ exports.queryGetIdFromTitle = async (title) => {
         console.log(`${title} have id: ${response}`);
         return response;
     } catch(error){
-        console.log("Error getting the serie_id from the database", error);
+        console.error("Error getting the serie_id from the database", error);
+        throw error;
     }
 }
 
