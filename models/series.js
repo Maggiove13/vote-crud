@@ -110,10 +110,10 @@ exports.queryDeleteLink = async (title) => {
 
 
 // Para ponerle otro link
-exports.queryUpdateLink = async (link, serie_id) => {
-    const query = 'UPDATE series SET link_url = ? WHERE id = ?';
+exports.queryUpdateLink = async (link, title) => {
+    const query = 'UPDATE series SET link_url = ? WHERE title = ?';
     try{
-        const [result] = await pool.execute(query, [link, serie_id]);
+        const [result] = await pool.execute(query, [link, title]);
         console.log("Link updated successfully.");
         return result;
     } catch(error){
