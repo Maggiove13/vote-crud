@@ -94,7 +94,7 @@ exports.deleteSerie = async (req, res) => {
 
 
 
-exports.updateSerie = async (req, res) => {
+exports.updateSerieTitle = async (req, res) => {
 
     const { title, description, user_id } = req.body;
 
@@ -135,3 +135,5 @@ exports.updateSerie = async (req, res) => {
         return res.status(500).send({message: "Internal server error"});
     }
 }
+
+
