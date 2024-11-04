@@ -97,10 +97,10 @@ exports.queryInsertIntoSeriesLink = async (serie_id, link) => {
 
 
 // Para eliminar el link
-exports.queryDeleteLink = async (link, serie_id) => {
-    const query = 'UPDATE series SET link_url = NULL WHERE id = ?';
+exports.queryDeleteLink = async (title) => {
+    const query = 'UPDATE series SET link_url = NULL WHERE title = ?';
     try{
-        const [result] = await pool.execute(query, [link, serie_id]);
+        const [result] = await pool.execute(query, [title]);
         console.log("Link deleted successfully.");
         return result;
     } catch(error){
