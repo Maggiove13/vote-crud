@@ -137,3 +137,69 @@ exports.updateSerieTitle = async (req, res) => {
 }
 
 
+exports.insertSerieLink = async (req, res) => {
+    const { title, link } = req.body;
+
+    if (!title){
+        return res.status(400).send({message: "The title has to be specified"});
+    }
+
+    try{
+        const responseSerieId = await queryGetIdFromTitle(title);
+        console.log("La respuesta del query para obtener la serie_id es:", responseSerieId);
+
+        if (responseSerieId.length === 0) {
+            console.log("Serie_id not found")
+            return res.status(404).send({ message: "Serie not found"});
+        }
+
+        const serie_id = responseSerieId[0].id;
+        console.log(serie_id);
+
+        if (!link){
+            return res.status(400).send({message: "No link has been loaded"});
+        }
+
+        const responseQuery = await queryInsertIntoSeriesUrl(serie_id, link);
+        if (responseQuery.affectedRows === 0){
+            return res.status(400).send({message: "The link could not be inserted"});
+        } else {
+            return res.status(200).send({status: "Success", message: "The link was inserted correctly", SerieData: {
+                Title: title,
+                id: serie_id,
+                link: link
+            }});
+        }
+
+    } catch(error){
+        console.error("Error insertando el link", error);
+        return res.status(500).send({message: "Internal server error"});
+    }
+
+}
+
+
+
+exports.deleteLink = async (req, res) => {
+    const { title } = req.body;
+
+    if (!title || title.trim() === ""){
+        return res.status(400).send({message: "Title is require to delete a link"});
+    }
+
+    try{
+        
+        const responseQuery = await queryDeleteLink(title);
+
+        if (responseQuery.affectedRows === 0){
+            return res.status(400).send({message: "The Link was not deleted"});
+        } else {
+            return res.status(200).send({message: "The Link successfully deleted"});
+        }
+    } catch(error){
+        console.error("Error found:", error);
+        return res.status(500).send({message: "Internal server error"});
+    }
+}
+
+
