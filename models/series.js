@@ -42,11 +42,11 @@ exports.queryToGetAllTitles = async () => {
 
 
 // Para que un usuario pueda eliminar un id de una tabla
-exports.queryDeleteSerie = async (serie_id, user_id) => {
-    const query = 'DELETE FROM series WHERE id= ?, AND user_id = ?';
+exports.queryDeleteSerie = async (title, user_id) => {
+    const query = 'DELETE FROM series WHERE title = ?, AND user_id = ?';
 
     try{
-        const [response] = await pool.execute(query, [serie_id, user_id]);
+        const [response] = await pool.execute(query, [title, user_id]);
         console.log("Serie deleted successfully");
         return response;
     } catch (error){
