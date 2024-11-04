@@ -1,4 +1,4 @@
-const { queryToInsertSeriesName, queryVerifySeriesTitle, queryToGetAllTitles, queryDeleteSerie, queryUpdateSerie, queryInsertIntoSeriesUrl, queryDeleteLink, queryUpdateLink, queryVoteCount } = require("../models/series.js");
+const { queryToInsertSeriesName, queryVerifySeriesTitle, queryToGetAllTitles, queryDeleteSerie, queryUpdateSerie, queryInsertIntoSeriesUrl, queryDeleteLink, queryUpdateLink, queryVoteCount,queryGetIdFromTitle } = require("../models/series.js");
 
 const { getUserId } = require("./userController.js");
 
@@ -61,12 +61,13 @@ exports.getAllSeries = async (res, req) => {
 }
 
 
+
 exports.deleteSerie = async (req, res) => {
 
     const { title, user_id } = req.body
     
     try{
-        if (!title && user_id){
+        if (!title && !user_id){
             res.status(404).send({message: "user_id and title not found"});
         }
 
@@ -87,6 +88,50 @@ exports.deleteSerie = async (req, res) => {
         }
     } catch(error){
         console.log("Error fetching all the series titles:", error);
+        return res.status(500).send({message: "Internal server error"});
+    }
+}
+
+
+
+exports.updateSerie = async (req, res) => {
+
+    const { title, description, user_id } = req.body;
+
+    try{
+
+        if (!title || !user_id){
+            return res.status(404).send({message: "TITLE, and USER_ID must be completed"});
+        }
+
+        const responseSerieId = await queryGetIdFromTitle(title);
+        console.log("La respuesta del query para obtener ese es", responseSerieId)
+
+        if (responseSerieId.length === 0) {
+            console.log("Serie_id not found")
+            return res.status(404).send({ message: "Serie not found"});
+        }
+
+        const serie_id = responseSerieId[0].id;
+        console.log(serie_id);
+
+        response = await queryUpdateSerie(title, description, serie_id, user_id);
+        if (response.affectedRows === 0){
+
+            console.log(title, description, serie_id, user_id);
+
+            return res.status(400).send({message: "Data could not be updated"})
+        } else {
+            return res.status(200).send({status: "Success", message: "Data could not be updated", 
+            dataUpdated: {
+                id: serie_id,
+                title: title,
+                description: description
+            }});
+        }
+
+    } catch(error){
+        console.error("Error during the update:", error);
         return res.status(500).send({message: "Internal server error"});
     }
 }
