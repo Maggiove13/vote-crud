@@ -41,6 +41,20 @@ exports.queryToGetAllTitles = async () => {
 }
 
 
+exports.queryGetIdFromTitle = async (title) => {
+    const query = 'SELECT id FROM series WHERE title = ?';
+
+    try{
+        const [ response ] = await pool.execute(query, [title]);
+        console.log("The title searched is:", title);
+        console.log(`${title} have id: ${response}`);
+        return response;
+    } catch(error){
+        console.log("Error getting the serie_id from the database", error);
+    }
+}
+
+
 // Para que un usuario pueda eliminar un id de una tabla
 exports.queryDeleteSerie = async (title, user_id) => {
     const query = 'DELETE FROM series WHERE title = ?, AND user_id = ?';
