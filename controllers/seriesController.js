@@ -18,9 +18,9 @@ exports.insertSerie = async (req, res) => {
             return res.status(400).send({message: "this title already exists"});
         }
 
-        const insertResponse = await queryToInsertSeriesName(title, description || null, user_id);
-        console.log(insertResponse);
-        if (insertResponse.affectedRows === 0) {
+        const { serie_id, affectedRows } = await queryToInsertSeriesName(title, description || null, user_id);
+        console.log(affectedRows);
+        if (affectedRows === 0) {
             return res.status(201).send({
                 status: "Error inserting data",
                 message: "Data not inserted in the table"
@@ -56,6 +56,37 @@ exports.getAllSeries = async (res, req) => {
         }
     } catch(error){
         console.log("Error fetching all the series data:", error);
+        return res.status(500).send({message: "Internal server error"});
+    }
+}
+
+
+exports.deleteSerie = async (req, res) => {
+
+    const { title, user_id } = req.body
+    
+    try{
+        if (!title && user_id){
+            res.status(404).send({message: "user_id and title not found"});
+        }
+
+        const responseAllSeries = await queryToGetAllTitles();
+        const serieExists = responseAllSeries.some(serie => {
+            return serie.title === title;
+        });
+
+        if (!serieExists) {
+            return res.status(404).send({ status: "NOT FOUND", message: "That title doesn't exist"});
+        }
+        
+        response = await queryDeleteSerie(title, user_id);
+        if (response.affectedRows === 0){
+            return res.status(400).send({message: `title ${title} not deleted`});
+        } else {
+            return res.status(200).send({message: `${title} deleted successfully`});
+        }
+    } catch(error){
+        console.log("Error fetching all the series titles:", error);
         return res.status(500).send({message: "Internal server error"});
     }
 }
