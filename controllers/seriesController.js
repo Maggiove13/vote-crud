@@ -80,7 +80,7 @@ exports.deleteSerie = async (req, res) => {
 
         const responseAllSeries = await queryToGetAllTitles();
         const serieExists = responseAllSeries.some(serie => {
-            return serie.title === title;
+            return serie.title === titleLower;
         });
 
         if (!serieExists) {
