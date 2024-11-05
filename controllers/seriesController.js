@@ -103,15 +103,17 @@ exports.deleteSerie = async (req, res) => {
 
 exports.updateSerieTitle = async (req, res) => {
 
-    const { title, description, user_id } = req.body;
+    const { title, description } = req.body;
 
     try{
 
-        if (!title || !user_id){
-            return res.status(404).send({message: "TITLE, and USER_ID must be completed"});
+        if (!title || title.trim() === ""){
+            return res.status(400).send({message: "Title not found"});
         }
 
-        const responseSerieId = await queryGetIdFromTitle(title);
+        const titleLower = title.toLowerCase();
+
+        const responseSerieId = await queryGetIdFromTitle(titleLower);
         console.log("La respuesta del query para obtener ese es", responseSerieId)
 
         if (responseSerieId.length === 0) {
@@ -122,18 +124,16 @@ exports.updateSerieTitle = async (req, res) => {
         const serie_id = responseSerieId[0].id;
         console.log(serie_id);
 
-        response = await queryUpdateSerie(title, description, serie_id, user_id);
+        response = await queryUpdateSerie(titleLower, description, serie_id);
         if (response.affectedRows === 0){
-
-            console.log(title, description, serie_id, user_id);
-
-            return res.status(400).send({message: "Data could not be updated"})
+            console.log(titleLower, description, serie_id);
+            return res.status(400).send({message: "Serie could not be updated"})
         } else {
-            return res.status(200).send({status: "Success", message: "Data could not be updated", 
+            return res.status(200).send({status: "Success", message: "Serie successfully updated", 
             dataUpdated: {
                 id: serie_id,
-                title: title,
-                description: description
+                Title: titleLower,
+                Description: description
             }});
         }
 
