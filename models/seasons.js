@@ -9,7 +9,8 @@ exports.queryToCreateASeason = async (serie_id, user_id, season_name) => {
         console.log("Data inserted correctly");
         return response;
     } catch (error) {
-        console.log("Data could not be inserted. Error:", error);
+        console.error("Data could not be inserted. Error:", error);
+        throw error;
     }
 }
 
