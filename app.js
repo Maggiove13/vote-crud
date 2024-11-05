@@ -11,6 +11,8 @@ checkDatabaseConnection();
 
 app.use(express.json());
 
+app.set("view engine", "ejs");
+
 app.use('/api', router);
 
 const port = process.env.PORT;
