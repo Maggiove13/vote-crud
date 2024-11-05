@@ -1,12 +1,12 @@
 const pool = require("../config/config.js");
 
 
-exports.queryToCreateASeason = async (serie_id, user_id, season_name) => {
-    const query = 'INSERT INTO seasons (serie_id, user_id, season_name) VALUES (?, ?, ?)';
+exports.queryToCreateASeason = async (user_id, season_name) => {
+    const query = 'INSERT INTO seasons (user_id, season_name) VALUES (?, ?, ?)';
 
     try{
-        const [response] = await pool.execute(query, [serie_id, user_id, season_name]);
-        console.log("Data inserted correctly");
+        const [response] = await pool.execute(query, [user_id, season_name]);
+        console.log(response);
         return response;
     } catch (error) {
         console.error("Data could not be inserted. Error:", error);
