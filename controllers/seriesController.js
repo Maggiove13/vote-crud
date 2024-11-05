@@ -1,10 +1,20 @@
-const { queryToInsertSeriesName, queryVerifySeriesTitle, queryToGetAllTitles, queryDeleteSerie, queryUpdateSerie, queryInsertIntoSeriesLink, queryDeleteLink, queryUpdateLink, queryVoteCount, queryGetIdsFromTitle } = require("../models/series.js");
+const { 
+    queryToInsertSeriesName, 
+    queryVerifySeriesTitle, 
+    queryToGetAllTitles, 
+    queryDeleteSerie, 
+    queryUpdateSerie, 
+    queryInsertIntoSeriesLink, 
+    queryDeleteLink, 
+    queryUpdateLink, 
+    queryVoteCount, 
+    queryGetIdsFromTitle } = require("../models/series.js");
 
 const { getUserId } = require("./userController.js");
 
 
 exports.insertSerie = async (req, res) => {
-    const { title, description, user_id } = req.body;
+    const { title, description, user_id, image } = req.body;
 
     try{  
         
@@ -20,7 +30,7 @@ exports.insertSerie = async (req, res) => {
             return res.status(400).send({message: "Title already exists"});
         }
 
-        const { serie_id, affectedRows } = await queryToInsertSeriesName(titleLower, description || null, user_id);
+        const { serie_id, affectedRows } = await queryToInsertSeriesName(titleLower, description || null, user_id, image || null);
         console.log(affectedRows);
         if (affectedRows === 0) {
             return res.status(400).send({
@@ -276,6 +286,18 @@ exports.incrementVoteCount = async (req, res) => {
         }
     } catch(error){
         console.error("Error incrementando el contador de votos:", error);
+        return res.status(500).send({message: "Internal server error"});
+    }
+}
+
+
+exports.renderSeriesPage = async (req, res) => {
+    try {
+        const allSeries = await queryToGetAllTitles();
+        console.log("All the series:", allSeries);
+        res.render("index", {allSeries});
+    } catch (error) {
+        console.error("Error while rendering the page:", error);
         return res.status(500).send({message: "Internal server error"});
     }
 }
