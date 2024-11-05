@@ -272,18 +272,15 @@ exports.updateLink = async (req, res) => {
 
 exports.incrementVoteCount = async (req, res) => {
     const { title } = req.body;
+    const back = req.header("Referer");
 
     if (!title || title.trim() === "") {
         return res.status(400).send({message: "A title is required to vote for a serie"});
     }
     const titleLower = title.trim().toLowerCase();
     try{
-        responseVoteCount = await queryVoteCount(titleLower);
-        if (responseVoteCount.affectedRows === 0){
-            return res.status(404).send({ message: "Something is fishy"});
-        } else{
-            return res.status(200).send({ message: "your vote is counting"});
-        }
+        await queryVoteCount(titleLower);
+        res.redirect(back);
     } catch(error){
         console.error("Error incrementando el contador de votos:", error);
         return res.status(500).send({message: "Internal server error"});
