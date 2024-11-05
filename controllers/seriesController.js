@@ -203,3 +203,63 @@ exports.deleteLink = async (req, res) => {
 }
 
 
+exports.updateLink = async (req, res) => {
+    const { title, link } = req.body;
+
+    if (!title || title.trim() === ""){
+        return res.status(400).send({message: "Title is required to delete a link"});
+    }
+
+    if (!link){
+        return res.status(404).send({status: "NOT FOUND", message: "A link is require"});
+    }
+
+    try{
+
+        const responseAllSeries = await queryToGetAllTitles();
+        const serieExists = responseAllSeries.some(serie => {
+            return serie.title === title;
+        });
+
+        if (!serieExists) {
+            return res.status(404).send({ status: "NOT FOUND", message: "That title doesn't exist"});
+        }
+
+        const responseQueryUpdate = await queryUpdateLink(link, title);
+        if (responseQueryUpdate. affectedRows === 0){
+            return res.status(400).send({message: "No link was updated"});
+        }
+        
+
+    } catch(error){
+        console.error("Error:", error);
+        return res.status(500).send({message: "Internal server error"});
+    }
+}
+
+
+
+exports.incrementVoteCount = async (req, res) => {
+    const { title } = req.body;
+    if (!title || title.trim() === "") {
+        return res.status(400).send({message: "A title is required to vote for a serie"});
+    }
+    try{
+        const responseSerieId = await queryGetIdFromTitle(title);
+        console.log("Serie encontrada:", responseSerieId);
+        if (!responseSerieId || responseSerieId.length === 0){
+            return res.status(404).send({ message: "Serie not found"});
+        }
+        const serie_id = responseSerieId[0].id;
+
+        responseVoteCount = await queryVoteCount(serie_id);
+        if (responseVoteCount.affectedRows === 0){
+            return res.status(404).send({ message: "Something is fishy"});
+        } else{
+            return res.status(200).send({ message: "your vote is counting"});
+        }
+    } catch(error){
+        console.error("Error incrementando el contador de votos:", error);
+        return res.status(500).send({message: "Internal server error"});
+    }
+}
