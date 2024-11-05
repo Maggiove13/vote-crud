@@ -46,13 +46,13 @@ exports.insertSerie = async (req, res) => {
 
 
 
-exports.getAllSeries = async (res, req) => {
+exports.getAllSeries = async (req, res) => {
     try{
         const responseAllSeries = await queryToGetAllTitles();
 
         if (responseAllSeries.length > 0){
             console.log("Series retrieved:", responseAllSeries);
-            return res.status(200).send({
+            return res.status(201).send({
                 message: "Successfully retrieved all the series", 
                 data: responseAllSeries
             })
