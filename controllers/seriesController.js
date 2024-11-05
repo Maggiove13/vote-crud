@@ -8,20 +8,22 @@ exports.insertSerie = async (req, res) => {
 
     try{  
         
-        if (!title || !user_id){
-            console.log("title not found");
-            return res.status(400).send({status: "Error", message: "Title and user_id are required"});
-        }
-        
-        const verifyTitleResponse = await queryVerifySeriesTitle(title);
-        if (verifyTitleResponse.length > 0){
-            return res.status(400).send({message: "this title already exists"});
+        if (!title || title.trim() === ""){
+            console.log("Title not found");
+            return res.status(400).send({status: "Error", message: "A title is required"});
         }
 
-        const { serie_id, affectedRows } = await queryToInsertSeriesName(title, description || null, user_id);
+        const titleLower = title.toLowerCase();
+
+        const verifyTitleResponse = await queryVerifySeriesTitle(titleLower);
+        if (verifyTitleResponse.length > 0){
+            return res.status(400).send({message: "Title already exists"});
+        }
+
+        const { serie_id, affectedRows } = await queryToInsertSeriesName(titleLower, description || null, user_id);
         console.log(affectedRows);
         if (affectedRows === 0) {
-            return res.status(201).send({
+            return res.status(400).send({
                 status: "Error inserting data",
                 message: "Data not inserted in the table"
             });
@@ -30,7 +32,10 @@ exports.insertSerie = async (req, res) => {
         return res.status(201).send({
             status: "Success",
             message: "Serie successfully inserted", 
-            data: {title, description, user_id}
+            data: {Title: titleLower,
+                Description: description, 
+                id_Serie: serie_id,
+                User_id: user_id}
         });
 
     } catch (error){
@@ -86,7 +91,7 @@ exports.deleteSerie = async (req, res) => {
         if (response.affectedRows === 0){
             return res.status(400).send({message: `title ${titleLower} not deleted`});
         } else {
-            return res.status(200).send({message: `${title} deleted successfully from the databse`});
+            return res.status(200).send({message: `${titleLower} deleted successfully from the databse`});
         }
     } catch(error){
         console.error("Error fetching all the series titles:", error);
