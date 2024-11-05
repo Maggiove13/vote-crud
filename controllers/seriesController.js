@@ -255,8 +255,9 @@ exports.incrementVoteCount = async (req, res) => {
     if (!title || title.trim() === "") {
         return res.status(400).send({message: "A title is required to vote for a serie"});
     }
+    const titleLower = title.trim().toLowerCase();
     try{
-        const responseSerieId = await queryGetIdFromTitle(title);
+        const responseSerieId = await queryGetIdFromTitle(titleLower);
         console.log("Serie encontrada:", responseSerieId);
         if (!responseSerieId || responseSerieId.length === 0){
             return res.status(404).send({ message: "Serie not found"});
