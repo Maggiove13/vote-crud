@@ -5,8 +5,9 @@ exports.queryToInsertUser = async(user_name, password, email) => {
     const query = 'INSERT INTO users (user_name, email, password) VALUES (?, ?, ?)';
 
     try {
-        await pool.execute(query, [user_name, email, password]);
+        const [ response ] = await pool.execute(query, [user_name, email, password]);
         console.log("User created");
+        return response;
     } catch (error) {
         console.log("Error:", error);
     }
