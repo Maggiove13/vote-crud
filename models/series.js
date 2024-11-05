@@ -26,7 +26,7 @@ exports.queryVerifySeriesTitle = async (title) => {
 
 
 exports.queryToGetAllTitles = async () => {
-    const query = 'SELECT title FROM series';
+    const query = 'SELECT * FROM series';
 
     try{
         const [response] = await pool.execute(query);
