@@ -5,10 +5,10 @@ checkDatabaseConnection();
 
 
 exports.queryToInsertUser = async(user_name, password, email) => {
-    const query = 'INSERT INTO users (user_name, password, password) VALUES (?, ?, ?)';
+    const query = 'INSERT INTO users (user_name, email, password) VALUES (?, ?, ?)';
 
     try {
-        await pool.execute(query, [user_name, password, email]);
+        await pool.execute(query, [user_name, email, password]);
         console.log("User created");
     } catch (error) {
         console.log("Error:", error);
