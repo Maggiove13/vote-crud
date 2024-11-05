@@ -1,4 +1,4 @@
-const { queryToInsertSeriesName, queryVerifySeriesTitle, queryToGetAllTitles, queryDeleteSerie, queryUpdateSerie, queryInsertIntoSeriesUrl, queryDeleteLink, queryUpdateLink, queryVoteCount,queryGetIdFromTitle } = require("../models/series.js");
+const { queryToInsertSeriesName, queryVerifySeriesTitle, queryToGetAllTitles, queryDeleteSerie, queryUpdateSerie, queryInsertIntoSeriesUrl, queryDeleteLink, queryUpdateLink, queryVoteCount, queryGetIdFromTitle } = require("../models/series.js");
 
 const { getUserId } = require("./userController.js");
 
@@ -64,12 +64,14 @@ exports.getAllSeries = async (res, req) => {
 
 exports.deleteSerie = async (req, res) => {
 
-    const { title, user_id } = req.body
+    const { title } = req.body
     
     try{
-        if (!title && !user_id){
-            res.status(404).send({message: "user_id and title not found"});
+        if (!title || title.trim() === "") {
+            return res.status(400).send({message: "Title not found"});
         }
+
+        const titleLower = title.toLowerCase()
 
         const responseAllSeries = await queryToGetAllTitles();
         const serieExists = responseAllSeries.some(serie => {
@@ -77,17 +79,17 @@ exports.deleteSerie = async (req, res) => {
         });
 
         if (!serieExists) {
-            return res.status(404).send({ status: "NOT FOUND", message: "That title doesn't exist"});
+            return res.status(404).send({ status: "Not Found", message: "That title doesn't exist"});
         }
         
-        response = await queryDeleteSerie(title, user_id);
+        response = await queryDeleteSerie(titleLower);
         if (response.affectedRows === 0){
-            return res.status(400).send({message: `title ${title} not deleted`});
+            return res.status(400).send({message: `title ${titleLower} not deleted`});
         } else {
-            return res.status(200).send({message: `${title} deleted successfully`});
+            return res.status(200).send({message: `${title} deleted successfully from the databse`});
         }
     } catch(error){
-        console.log("Error fetching all the series titles:", error);
+        console.error("Error fetching all the series titles:", error);
         return res.status(500).send({message: "Internal server error"});
     }
 }
