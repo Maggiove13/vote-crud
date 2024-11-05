@@ -41,12 +41,16 @@ exports.queryToGetAllTitles = async () => {
 }
 
 
-exports.queryGetIdFromTitle = async (title) => {
-    const query = 'SELECT id FROM series WHERE title = ?';
+exports.queryGetIdsFromTitle = async (title) => {
+    const query = 'SELECT id, user_id FROM series WHERE title = ?';
 
     try{
         const [ response ] = await pool.execute(query, [title]);
-        console.log("The title searched is:", title);
+
+        if (response.length === 0) {
+            console.log(`No series found with the title: ${title}`);
+            return null; 
+        }
         console.log(`${title} have id: ${response}`);
         return response;
     } catch(error){
