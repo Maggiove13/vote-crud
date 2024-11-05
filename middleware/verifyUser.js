@@ -1,5 +1,5 @@
 
-const queryGetIdsFromTitle = require('../models/series');
+const queryGetIdsFromTitle = require('../models/series.js');
 
 const verifyCreator = async (req, res, next) => {
     const { title , user_id } = req.body;
