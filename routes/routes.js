@@ -1,8 +1,15 @@
 const express = require('express');
-const router = express.Router();
-const { registerUser, getUserId} = require("../controllers/userController.js");
 
+const { registerUser, getUserId} = require("../controllers/userController.js");
+const { insertSerie, getAllSeries, deleteSerie, updateSerieTitle, insertSerieLink, deleteLink, 
+    updateLink, incrementVoteCount } = require("../controllers/seriesController.js");
+
+
+const router = express.Router();
 
 router.post('/register',registerUser);
+
+router.post('/series', insertSerie);
+
 
 module.exports = router;
