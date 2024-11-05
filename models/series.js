@@ -85,7 +85,7 @@ exports.queryUpdateSerie = async (title, description, serie_id) => {
 
 
 exports.queryInsertIntoSeriesLink = async (link, title) => {
-    const query = 'INSERT INTO series url = ?, WHERE title = ?';
+    const query = 'UPDATE series SET link_url = ? WHERE title = ?';
     try{
         const [result] = await pool.execute(query, [link, title]);
         console.log("Link inserted correctly");
