@@ -243,6 +243,14 @@ exports.updateLink = async (req, res) => {
             return res.status(400).send({message: "No link was updated"});
         }
         
+        return res.status(200).send({
+            status: "Success",
+            message: "Link updated successfully",
+            data: {
+                title: titleLower,
+                New_link: linkk
+            }
+        });
 
     } catch(error){
         console.error("Error:", error);
