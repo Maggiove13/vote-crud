@@ -1,4 +1,4 @@
-const { queryToInsertSeriesName, queryVerifySeriesTitle, queryToGetAllTitles, queryDeleteSerie, queryUpdateSerie, queryInsertIntoSeriesUrl, queryDeleteLink, queryUpdateLink, queryVoteCount, queryGetIdFromTitle } = require("../models/series.js");
+const { queryToInsertSeriesName, queryVerifySeriesTitle, queryToGetAllTitles, queryDeleteSerie, queryUpdateSerie, queryInsertIntoSeriesLink, queryDeleteLink, queryUpdateLink, queryVoteCount, queryGetIdFromTitle } = require("../models/series.js");
 
 const { getUserId } = require("./userController.js");
 
@@ -147,12 +147,13 @@ exports.updateSerieTitle = async (req, res) => {
 exports.insertSerieLink = async (req, res) => {
     const { title, link } = req.body;
 
-    if (!title){
-        return res.status(400).send({message: "The title has to be specified"});
+    if (!title || title.trim() === ""){
+        return res.status(400).send({message: "Title not found"});
     }
-
+    const titleLower = title.toLowerCase();
+    const Linkk = link.trim();
     try{
-        const responseSerieId = await queryGetIdFromTitle(title);
+        const responseSerieId = await queryGetIdFromTitle(titleLower);
         console.log("La respuesta del query para obtener la serie_id es:", responseSerieId);
 
         if (responseSerieId.length === 0) {
@@ -163,18 +164,19 @@ exports.insertSerieLink = async (req, res) => {
         const serie_id = responseSerieId[0].id;
         console.log(serie_id);
 
-        if (!link){
-            return res.status(400).send({message: "No link has been loaded"});
+        if (!Linkk){
+            return res.status(400).send({message: "No link provided"});
         }
 
-        const responseQuery = await queryInsertIntoSeriesUrl(serie_id, link);
+
+        const responseQuery = await queryInsertIntoSeriesLink(Linkk, titleLower);
         if (responseQuery.affectedRows === 0){
             return res.status(400).send({message: "The link could not be inserted"});
         } else {
             return res.status(200).send({status: "Success", message: "The link was inserted correctly", SerieData: {
-                Title: title,
+                Title: titleLower,
                 id: serie_id,
-                link: link
+                Link: Linkk
             }});
         }
 
@@ -194,9 +196,10 @@ exports.deleteLink = async (req, res) => {
         return res.status(400).send({message: "Title is require to delete a link"});
     }
 
+    const titleLower = title.toLowerCase();
     try{
         
-        const responseQuery = await queryDeleteLink(title);
+        const responseQuery = await queryDeleteLink(titleLower);
 
         if (responseQuery.affectedRows === 0){
             return res.status(400).send({message: "The Link was not deleted"});
