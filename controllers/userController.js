@@ -15,9 +15,19 @@ exports.registerUser = async (req, res) => {
             return res.status(400).send({status: "Bad requests", message: "This email is already registered"});
         }
         
-        await queryToInsertUser(user_name, password, email);
-            console.log("User successfully created");
-            return res.status(201).send({message: "User successfully created"})
+        const responseQuery = await queryToInsertUser(user_name, password, email);
+
+        if (!responseQuery || responseQuery.affectedRows === 0){
+            return res.status(404).send({message: "Something went wrong while creating the user" });
+        }
+        const user_id = responseQuery.insertId;
+        console.log(responseQuery);
+
+        return res.status(201).send({message: "User successfully created", Data: {
+                user_name: user_name,
+                user_id : user_id
+            }});
+
 
     } catch(error){
         res.status(500).send({message: "Error creating user"});
