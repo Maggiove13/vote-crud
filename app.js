@@ -1,7 +1,7 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const router = require("./routes/routes.js");
-const { checkDatabaseConnection } = require("./models.js"); 
+const { checkDatabaseConnection } = require("./models/models.js"); 
 
 dotenv.config()
 
