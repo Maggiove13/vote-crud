@@ -117,7 +117,8 @@ exports.queryUpdateLink = async (link, title) => {
         console.log("Link updated successfully.");
         return result;
     } catch(error){
-        console.log("Error updating the link", error);
+        console.error("Error updating the link", error);
+        throw error;
     }
 }
 
