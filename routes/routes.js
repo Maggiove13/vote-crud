@@ -32,6 +32,6 @@ router.post('/series/vote', incrementVoteCount);
 
 router.post('/series/seasons', insertSeason);
 
-router.get('/page', renderSeriesPage);
+router.get('/', renderSeriesPage);
 
 module.exports = router;
