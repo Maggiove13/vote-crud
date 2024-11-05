@@ -1,8 +1,4 @@
-const { checkDatabaseConnection } = require("./models.js"); 
 const pool = require("../config/config.js");
-
-
-checkDatabaseConnection();
 
 exports.queryToInsertSeriesName = async (title, description, user_id) => {
     const query = 'INSERT INTO series (title, description, user_id) VALUES (?, ?, ?)';

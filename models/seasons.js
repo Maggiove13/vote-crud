@@ -1,7 +1,4 @@
-const { checkDatabaseConnection } = require("./models.js"); 
 const pool = require("../config/config.js");
-
-checkDatabaseConnection();
 
 
 exports.queryToCreateASeason = async (id_serie, user_id, season_name) => {

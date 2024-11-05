@@ -1,7 +1,4 @@
-const { checkDatabaseConnection } = require("./models.js"); 
 const pool = require("../config/config.js");
-
-checkDatabaseConnection();
 
 
 exports.queryToInsertUser = async(user_name, password, email) => {
