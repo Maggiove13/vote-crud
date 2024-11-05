@@ -127,10 +127,10 @@ exports.queryUpdateLink = async (link, title) => {
 
 
 // Para agregar los votos del usuario a la tabla
-exports.queryVoteCount = async (serie_id) => {
-    const query = 'UPDATE series SET vote_count =  vote_count + 1 WHERE id = ?';
+exports.queryVoteCount = async (title) => {
+    const query = 'UPDATE series SET vote_count =  vote_count + 1 WHERE title = ?';
     try{
-        await pool.execute(query, [serie_id]);
+        await pool.execute(query, [title]);
         console.log("Vote count incremented succesfully");
     } catch (error) {
         console.log("Error updating the vote count", error);
