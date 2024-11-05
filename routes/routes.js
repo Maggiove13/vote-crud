@@ -18,5 +18,7 @@ router.put('/series', updateSerieTitle);
 
 router.delete('/series', deleteSerie);
 
+router.post('/series/link', insertSerieLink);
+
 
 module.exports = router;
