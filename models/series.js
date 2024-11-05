@@ -88,11 +88,11 @@ exports.queryUpdateSerie = async (title, description, serie_id) => {
 }
 
 
-exports.queryInsertIntoSeriesLink = async (serie_id, link) => {
-    const query = 'INSERT INTO series url = ?, WHERE id = ?';
+exports.queryInsertIntoSeriesLink = async (link, title) => {
+    const query = 'INSERT INTO series url = ?, WHERE title = ?';
     try{
-        const [result] = await pool.execute(query, [serie_id, link]);
-        console.log("url inserted correctly");
+        const [result] = await pool.execute(query, [link, title]);
+        console.log("Link inserted correctly");
         return result;
     } catch(error){
         console.log("Error inserting the url", error);
