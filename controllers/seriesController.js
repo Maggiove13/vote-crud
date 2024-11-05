@@ -13,7 +13,7 @@ exports.insertSerie = async (req, res) => {
             return res.status(400).send({status: "Error", message: "A title is required"});
         }
 
-        const titleLower = title.toLowerCase();
+        const titleLower = title.trim().toLowerCase();
 
         const verifyTitleResponse = await queryVerifySeriesTitle(titleLower);
         if (verifyTitleResponse.length > 0){
@@ -76,7 +76,7 @@ exports.deleteSerie = async (req, res) => {
             return res.status(400).send({message: "Title not found"});
         }
 
-        const titleLower = title.toLowerCase()
+        const titleLower = title.trim().toLowerCase();
 
         const responseAllSeries = await queryToGetAllTitles();
         const serieExists = responseAllSeries.some(serie => {
@@ -111,7 +111,7 @@ exports.updateSerieTitle = async (req, res) => {
             return res.status(400).send({message: "Title not found"});
         }
 
-        const titleLower = title.toLowerCase();
+        const titleLower = title.trim().toLowerCase();
 
         const responseSerieId = await queryGetIdFromTitle(titleLower);
         console.log("La respuesta del query para obtener ese es", responseSerieId)
@@ -150,7 +150,7 @@ exports.insertSerieLink = async (req, res) => {
     if (!title || title.trim() === ""){
         return res.status(400).send({message: "Title not found"});
     }
-    const titleLower = title.toLowerCase();
+    const titleLower = title.trim().toLowerCase();
     const Linkk = link.trim();
     try{
         const responseSerieId = await queryGetIdFromTitle(titleLower);
@@ -196,7 +196,7 @@ exports.deleteLink = async (req, res) => {
         return res.status(400).send({message: "Title is require to delete a link"});
     }
 
-    const titleLower = title.toLowerCase();
+    const titleLower = title.trim().toLowerCase();
     try{
         
         const responseQuery = await queryDeleteLink(titleLower);
@@ -219,23 +219,24 @@ exports.updateLink = async (req, res) => {
     if (!title || title.trim() === ""){
         return res.status(400).send({message: "Title is required to delete a link"});
     }
+    const titleLower = title.trim().toLowerCase();
 
     if (!link){
         return res.status(404).send({status: "NOT FOUND", message: "A link is require"});
     }
-
+    const linkk = link.trim();
     try{
 
         const responseAllSeries = await queryToGetAllTitles();
         const serieExists = responseAllSeries.some(serie => {
-            return serie.title === title;
+            return serie.title === titleLower;
         });
 
         if (!serieExists) {
             return res.status(404).send({ status: "NOT FOUND", message: "That title doesn't exist"});
         }
 
-        const responseQueryUpdate = await queryUpdateLink(link, title);
+        const responseQueryUpdate = await queryUpdateLink(linkk, titleLower);
         if (responseQueryUpdate. affectedRows === 0){
             return res.status(400).send({message: "No link was updated"});
         }
