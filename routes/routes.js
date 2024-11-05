@@ -2,7 +2,11 @@ const express = require('express');
 
 const { registerUser, getUserId} = require("../controllers/userController.js");
 const { insertSerie, getAllSeries, deleteSerie, updateSerieTitle, insertSerieLink, deleteLink, 
-    updateLink, incrementVoteCount } = require("../controllers/seriesController.js");
+    updateLink, incrementVoteCount, renderSeriesPage} = require("../controllers/seriesController.js");
+
+const { insertSeason } = require("../controllers/seasonsController.js");
+
+
 
 //const verifyCreator = require("../middleware/verifyUser.js");
 
@@ -24,6 +28,10 @@ router.delete('/series/link', deleteLink);
 
 router.put('/series/link', updateLink);
 
-router.put('/series/vote', incrementVoteCount);
+router.post('/series/vote', incrementVoteCount);
+
+router.post('/series/seasons', insertSeason);
+
+router.get('/page', renderSeriesPage);
 
 module.exports = router;
