@@ -11,5 +11,9 @@ router.post('/register',registerUser);
 
 router.post('/series', insertSerie);
 
+router.get('/series', getAllSeries);
+
+
+
 
 module.exports = router;
