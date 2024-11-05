@@ -3,12 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Home</title>
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-    <form action="/api/tema/votar" method="post">
-        <input name="nombre" />
-        <button submit></button>
-    </form>
+    <div class="wrapper-card">
+        <% allSeries.forEach(serie => { %>
+            <div>
+                <img src="<%= serie.image %>" alt="<%= serie.title %>">
+                <p><%= serie.title %></p>
+                <form action='series/vote' method="post">
+                    <button type="submit" ><%= serie.vote_count %></button>
+                    <input type="hidden" name="title" value="<%= serie.title %>"> 
+                </form>
+            </div>
+        <% }) %>
+    </div>
 </body>
 </html>
