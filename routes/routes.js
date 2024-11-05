@@ -13,7 +13,7 @@ router.post('/series', insertSerie);
 
 router.get('/series', getAllSeries);
 
-
+router.put('/series', updateSerieTitle);
 
 
 module.exports = router;
