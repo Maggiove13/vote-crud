@@ -24,5 +24,6 @@ router.delete('/series/link', deleteLink);
 
 router.put('/series/link', updateLink);
 
+router.put('/series/vote', incrementVoteCount);
 
 module.exports = router;
