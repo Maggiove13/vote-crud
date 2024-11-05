@@ -16,5 +16,7 @@ router.get('/series', getAllSeries);
 
 router.put('/series', updateSerieTitle);
 
+router.delete('/series', deleteSerie);
+
 
 module.exports = router;
