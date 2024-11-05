@@ -103,19 +103,20 @@ exports.deleteSerie = async (req, res) => {
 
 exports.updateSerieTitle = async (req, res) => {
 
-    const { title, description } = req.body;
-    console.log(title, description);
+    const { oldTitle, newTitle, newDescription } = req.body;
 
     try{
 
-        if (!title || title.trim() === ""){
+        const oldTitleLower = oldTitle.toLowerCase();
+
+        if (!oldTitleLower || oldTitleLower.trim() === ""){
             return res.status(400).send({message: "Title not found"});
         }
 
-        const titleLower = title.trim().toLowerCase();
+        const newTitleLower = newTitle.trim().toLowerCase();
 
-        const responseSerieId = await queryGetIdsFromTitle(titleLower);
-        console.log("La respuesta del query para obtener ese es", responseSerieId)
+        const responseSerieId = await queryGetIdsFromTitle(oldTitleLower);
+        console.log(`The query response based on the title: ${oldTitleLower} is:`, responseSerieId);
 
         if (responseSerieId.length === 0) {
             console.log("Serie_id not found")
@@ -123,18 +124,18 @@ exports.updateSerieTitle = async (req, res) => {
         }
 
         const serie_id = responseSerieId[0].id;
-        console.log(serie_id);
+        console.log(`${oldTitleLower} have id:`, serie_id);
 
-        response = await queryUpdateSerie(titleLower, description, serie_id);
+        response = await queryUpdateSerie(newTitleLower, newDescription || null, serie_id);
         if (response.affectedRows === 0){
-            console.log(titleLower, description, serie_id);
+            console.log(newTitleLower, newDescription, serie_id);
             return res.status(400).send({message: "Serie could not be updated"})
         } else {
             return res.status(200).send({status: "Success", message: "Serie successfully updated", 
             dataUpdated: {
                 id: serie_id,
-                Title: titleLower,
-                Description: description
+                Title: newTitleLower,
+                Description: newDescription
             }});
         }
 
