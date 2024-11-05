@@ -22,5 +22,7 @@ router.post('/series/link', insertSerieLink);
 
 router.delete('/series/link', deleteLink);
 
+router.put('/series/link', updateLink);
+
 
 module.exports = router;
