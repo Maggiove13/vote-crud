@@ -1,4 +1,4 @@
-const { queryToInsertSeriesName, queryVerifySeriesTitle, queryToGetAllTitles, queryDeleteSerie, queryUpdateSerie, queryInsertIntoSeriesLink, queryDeleteLink, queryUpdateLink, queryVoteCount, queryGetIdFromTitle } = require("../models/series.js");
+const { queryToInsertSeriesName, queryVerifySeriesTitle, queryToGetAllTitles, queryDeleteSerie, queryUpdateSerie, queryInsertIntoSeriesLink, queryDeleteLink, queryUpdateLink, queryVoteCount, queryGetIdsFromTitle } = require("../models/series.js");
 
 const { getUserId } = require("./userController.js");
 
@@ -104,6 +104,7 @@ exports.deleteSerie = async (req, res) => {
 exports.updateSerieTitle = async (req, res) => {
 
     const { title, description } = req.body;
+    console.log(title, description);
 
     try{
 
@@ -113,7 +114,7 @@ exports.updateSerieTitle = async (req, res) => {
 
         const titleLower = title.trim().toLowerCase();
 
-        const responseSerieId = await queryGetIdFromTitle(titleLower);
+        const responseSerieId = await queryGetIdsFromTitle(titleLower);
         console.log("La respuesta del query para obtener ese es", responseSerieId)
 
         if (responseSerieId.length === 0) {
@@ -252,7 +253,7 @@ exports.updateLink = async (req, res) => {
 
 exports.incrementVoteCount = async (req, res) => {
     const { title } = req.body;
-    
+
     if (!title || title.trim() === "") {
         return res.status(400).send({message: "A title is required to vote for a serie"});
     }
