@@ -155,7 +155,7 @@ exports.insertSerieLink = async (req, res) => {
     const titleLower = title.trim().toLowerCase();
     const Linkk = link.trim();
     try{
-        const responseSerieId = await queryGetIdFromTitle(titleLower);
+        const responseSerieId = await queryGetIdsFromTitle(titleLower);
         console.log("La respuesta del query para obtener la serie_id es:", responseSerieId);
 
         if (responseSerieId.length === 0) {
