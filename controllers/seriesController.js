@@ -252,19 +252,13 @@ exports.updateLink = async (req, res) => {
 
 exports.incrementVoteCount = async (req, res) => {
     const { title } = req.body;
+    
     if (!title || title.trim() === "") {
         return res.status(400).send({message: "A title is required to vote for a serie"});
     }
     const titleLower = title.trim().toLowerCase();
     try{
-        const responseSerieId = await queryGetIdFromTitle(titleLower);
-        console.log("Serie encontrada:", responseSerieId);
-        if (!responseSerieId || responseSerieId.length === 0){
-            return res.status(404).send({ message: "Serie not found"});
-        }
-        const serie_id = responseSerieId[0].id;
-
-        responseVoteCount = await queryVoteCount(serie_id);
+        responseVoteCount = await queryVoteCount(titleLower);
         if (responseVoteCount.affectedRows === 0){
             return res.status(404).send({ message: "Something is fishy"});
         } else{
