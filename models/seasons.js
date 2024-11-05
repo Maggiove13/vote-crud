@@ -1,7 +1,7 @@
 const pool = require("../config/config.js");
 
 
-exports.queryCreateSeason = async (user_id, season_name) => {
+exports.queryInsertSeason = async (user_id, season_name) => {
     const query = 'INSERT INTO seasons (user_id, season_name) VALUES (?, ?, ?)';
 
     try{
