@@ -4,6 +4,7 @@ const { registerUser, getUserId} = require("../controllers/userController.js");
 const { insertSerie, getAllSeries, deleteSerie, updateSerieTitle, insertSerieLink, deleteLink, 
     updateLink, incrementVoteCount } = require("../controllers/seriesController.js");
 
+//const verifyCreator = require("../middleware/verifyUser.js");
 
 const router = express.Router();
 
