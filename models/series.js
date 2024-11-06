@@ -72,7 +72,7 @@ exports.queryDeleteSerie = async (title) => {
 
 // Para que un usuario pueda actualizar el nombre de una serie
 exports.queryUpdateSerie = async (title, description, image, link, serie_id) => {
-    const query = 'UPDATE series SET title = ?, description = ?, image = ?, link = ? WHERE id = ?';
+    const query = 'UPDATE series SET title = ?, description = ?, image = ?, link_url = ? WHERE id = ?';
 
     try{
         const [response] = await pool.execute(query, [title, description, image, link, serie_id]);
