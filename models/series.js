@@ -1,9 +1,9 @@
 const pool = require("../config/config.js");
 
-exports.queryToInsertSeriesName = async (title, description, user_id, image) => {
-    const query = 'INSERT INTO series (title, description, user_id, image) VALUES (?, ?, ?, ?)';
+exports.queryToInsertSeriesName = async (title, description, user_id, image, link_url) => {
+    const query = 'INSERT INTO series (title, description, user_id, image, link_url) VALUES (?, ?, ?, ?)';
     try {
-        const [ result ] = await pool.execute(query, [title, description, user_id, image]);
+        const [ result ] = await pool.execute(query, [title, description, user_id, image, link_url]);
         console.log("Series inserted successfully.");
 
         const serie_id = result.insertId; 
