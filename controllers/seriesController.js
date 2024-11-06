@@ -111,9 +111,9 @@ exports.deleteSerie = async (req, res) => {
 
 
 
-exports.updateSerieTitle = async (req, res) => {
+exports.updateSerie = async (req, res) => {
 
-    const { oldTitle, newTitle, newDescription } = req.body;
+    const { oldTitle, newTitle, newDescription, newImage, newLink } = req.body;
 
     try{
 
@@ -122,6 +122,11 @@ exports.updateSerieTitle = async (req, res) => {
         if (!oldTitleLower || oldTitleLower.trim() === ""){
             return res.status(400).send({message: "Title not found"});
         }
+
+        if (!newTitle || newTitle.trim() === "") {
+            return res.status(400).json({ message: "New title is required" });
+        }
+
 
         const newTitleLower = newTitle.trim().toLowerCase();
 
@@ -135,17 +140,22 @@ exports.updateSerieTitle = async (req, res) => {
 
         const serie_id = responseSerieId[0].id;
         console.log(`${oldTitleLower} have id:`, serie_id);
+        const description = newDescription?.trim() || null;
+        const image = newImage?.trim() || null;
+        const link = newLink?.trim() || null;
 
-        response = await queryUpdateSerie(newTitleLower, newDescription || null, serie_id);
+
+        response = await queryUpdateSerie(newTitleLower, description, image , link, serie_id);
         if (response.affectedRows === 0){
-            console.log(newTitleLower, newDescription, serie_id);
             return res.status(400).send({message: "Serie could not be updated"})
         } else {
             return res.status(200).send({status: "Success", message: "Serie successfully updated", 
             dataUpdated: {
                 id: serie_id,
                 Title: newTitleLower,
-                Description: newDescription
+                Description: description,
+                Image: image,
+                Link: link
             }});
         }
 
