@@ -14,7 +14,7 @@ const { getUserId } = require("./userController.js");
 
 
 exports.insertSerie = async (req, res) => {
-    const { title, description, user_id, image } = req.body;
+    const { title, description, user_id, image, link_url } = req.body;
 
     try{  
         
@@ -30,7 +30,7 @@ exports.insertSerie = async (req, res) => {
             return res.status(400).send({message: "Title already exists"});
         }
 
-        const { serie_id, affectedRows } = await queryToInsertSeriesName(titleLower, description || null, user_id, image || null);
+        const { serie_id, affectedRows } = await queryToInsertSeriesName(titleLower, description || null, user_id, image || null, link_url || null);
         console.log(affectedRows);
         if (affectedRows === 0) {
             return res.status(400).send({
