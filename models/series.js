@@ -71,15 +71,16 @@ exports.queryDeleteSerie = async (title) => {
 
 
 // Para que un usuario pueda actualizar el nombre de una serie
-exports.queryUpdateSerie = async (title, description, serie_id) => {
-    const query = 'UPDATE series SET title = ?, description = ? WHERE id = ?';
+exports.queryUpdateSerie = async (title, description, image, link, serie_id) => {
+    const query = 'UPDATE series SET title = ?, description = ?, image = ?, link = ? WHERE id = ?';
 
     try{
-        const [response] = await pool.execute(query, [title, description, serie_id]);
-        console.log("Serie title, and description updated successfully");
+        const [response] = await pool.execute(query, [title, description, image, link, serie_id]);
+        console.log("Serie updated successfully");
         return response;
     } catch (error){
-        console.log("Error deleting the series", error);
+        console.error("Error updating the serie", error);
+        throw error;
     }
 }
 
