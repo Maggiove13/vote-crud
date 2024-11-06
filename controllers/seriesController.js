@@ -127,7 +127,6 @@ exports.updateSerie = async (req, res) => {
             return res.status(400).json({ message: "New title is required" });
         }
 
-
         const newTitleLower = newTitle.trim().toLowerCase();
 
         const responseSerieId = await queryGetIdsFromTitle(oldTitleLower);
@@ -140,6 +139,7 @@ exports.updateSerie = async (req, res) => {
 
         const serie_id = responseSerieId[0].id;
         console.log(`${oldTitleLower} have id:`, serie_id);
+
         const description = newDescription?.trim() || null;
         const image = newImage?.trim() || null;
         const link = newLink?.trim() || null;
