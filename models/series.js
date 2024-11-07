@@ -70,11 +70,11 @@ exports.querySerieById = async (serie_id) => {
 
 
 // Para que un usuario pueda eliminar un id de una tabla
-exports.queryDeleteSerie = async (title) => {
-    const query = 'DELETE FROM series WHERE title = ?';
+exports.queryDeleteSerie = async (serie_id) => {
+    const query = 'DELETE FROM series WHERE id = ?';
 
     try{
-        const [response] = await pool.execute(query, [title]);
+        const [response] = await pool.execute(query, [serie_id]);
         console.log("Serie deleted successfully");
         return response;
     } catch (error){
