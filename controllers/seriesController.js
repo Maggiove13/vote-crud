@@ -150,36 +150,25 @@ exports.updateSerie = async (req, res) => {
 
 
 exports.insertSerieLink = async (req, res) => {
-    const { title, link } = req.body;
+    const { serie_id, link } = req.body;
 
-    if (!title || title.trim() === ""){
-        return res.status(400).send({message: "Title not found"});
+    if (!serie_id){
+        return res.status(400).send({message: "serie_id not found"});
     }
-    const titleLower = title.trim().toLowerCase();
+    
     const Linkk = link.trim();
+
     try{
-        const responseSerieId = await queryGetIdsFromTitle(titleLower);
-        console.log("La respuesta del query para obtener la serie_id es:", responseSerieId);
-
-        if (responseSerieId.length === 0) {
-            console.log("Serie_id not found")
-            return res.status(404).send({ message: "Serie not found"});
-        }
-
-        const serie_id = responseSerieId[0].id;
-        console.log(serie_id);
-
         if (!Linkk){
             return res.status(400).send({message: "No link provided"});
         }
 
 
-        const responseQuery = await queryInsertIntoSeriesLink(Linkk, titleLower);
+        const responseQuery = await queryInsertIntoSeriesLink(Linkk, serie_id);
         if (responseQuery.affectedRows === 0){
             return res.status(400).send({message: "The link could not be inserted"});
         } else {
             return res.status(200).send({status: "Success", message: "The link was inserted correctly", SerieData: {
-                Title: titleLower,
                 id: serie_id,
                 Link: Linkk
             }});
@@ -195,16 +184,14 @@ exports.insertSerieLink = async (req, res) => {
 
 
 exports.deleteLink = async (req, res) => {
-    const { title } = req.body;
+    const { serie_id } = req.body;
 
-    if (!title || title.trim() === ""){
-        return res.status(400).send({message: "Title is require to delete a link"});
+    if (!serie_id){
+        return res.status(400).send({message: "serie_id is required to delete a link"});
     }
-
-    const titleLower = title.trim().toLowerCase();
     try{
         
-        const responseQuery = await queryDeleteLink(titleLower);
+        const responseQuery = await queryDeleteLink(serie_id);
 
         if (responseQuery.affectedRows === 0){
             return res.status(400).send({message: "The Link was not deleted"});
