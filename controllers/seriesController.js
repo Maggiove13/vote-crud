@@ -4,15 +4,12 @@ const {
     queryToGetAllTitles, 
     queryDeleteSerie, 
     queryUpdateSerie, 
-    queryInsertIntoSeriesLink, 
+    queryInsertSerieLink, 
     queryDeleteLink, 
     queryUpdateLink, 
     queryVoteCount, 
     queryGetIdsFromTitle,
     queryGetSerieById} = require("../models/series.js");
-
-const { getUserId } = require("./userController.js");
-
 
 exports.insertSerie = async (req, res) => {
     const { title, description, user_id, image, link_url } = req.body;
@@ -83,11 +80,11 @@ exports.getAllSeries = async (req, res) => {
 
 exports.deleteSerie = async (req, res) => {
 
-    const { title } = req.body
+    const { serie_id, title } = req.body
     
     try{
-        if (!title || title.trim() === "") {
-            return res.status(400).send({message: "Title not found"});
+        if (!serie_id || !title) {
+            return res.status(400).send({message: "Serie_id or title not found"});
         }
 
         const titleLower = title.trim().toLowerCase();
@@ -101,7 +98,7 @@ exports.deleteSerie = async (req, res) => {
             return res.status(404).send({ status: "Not Found", message: "That title doesn't exist"});
         }
         
-        response = await queryDeleteSerie(titleLower);
+        response = await queryDeleteSerie(serie_id);
         if (response.affectedRows === 0){
             return res.status(400).send({message: `title ${titleLower} not deleted`});
         } else {
