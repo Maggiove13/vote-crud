@@ -56,6 +56,19 @@ exports.queryGetIdsFromTitle = async (title) => {
 }
 
 
+exports.querySerieById = async (serie_id) => {
+    const query = 'SELECT * FROM series WHERE id = ?';
+    try {
+        const [result] = await pool.execute(query, [serie_id]);
+        return result;
+    } catch (error) {
+        console.error("Error getting the data from the id:", error);
+        throw error;
+    }
+};
+
+
+
 // Para que un usuario pueda eliminar un id de una tabla
 exports.queryDeleteSerie = async (title) => {
     const query = 'DELETE FROM series WHERE title = ?';
@@ -112,7 +125,7 @@ exports.queryDeleteLink = async (title) => {
 
 // Para ponerle otro link
 exports.queryUpdateLink = async (link, title) => {
-    const query = 'UPDATE series SET link_url = ? WHERE title = ?';
+    const query = 'UPDATE series SET link_url = ? WHERE id = ?';
     try{
         const [result] = await pool.execute(query, [link, title]);
         console.log("Link updated successfully.");
