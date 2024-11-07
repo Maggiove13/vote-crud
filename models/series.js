@@ -1,13 +1,14 @@
 const pool = require("../config/config.js");
 
-exports.queryToInsertSeriesName = async (title, description, user_id, image, link_url) => {
-    const query = 'INSERT INTO series (title, description, user_id, image, link_url) VALUES (?, ?, ?, ?)';
+exports.queryToInsertSeriesName = async (title, description, image, link_url) => {
+    const query = 'INSERT INTO series (title, description, image, link_url) VALUES (?, ?, ?, ?)';
     try {
-        const [ result ] = await pool.execute(query, [title, description, user_id, image, link_url]);
+        const [ result ] = await pool.execute(query, [title, description, image, link_url]);
         console.log("Series inserted successfully.");
 
         const serie_id = result.insertId; 
         return { serie_id, affectedRows: result.affectedRows };
+
     } catch(error){
         console.log("Error: Inserting data to the series table", error);
     }
@@ -82,7 +83,6 @@ exports.queryDeleteSerie = async (serie_id) => {
     }
 }
 
-
 exports.queryUpdateSerie = async (title, description, image, link, serie_id) => {
     const query = 'UPDATE series SET title = ?, description = ?, image = ?, link_url = ? WHERE id = ?';
 
@@ -92,45 +92,6 @@ exports.queryUpdateSerie = async (title, description, image, link, serie_id) => 
         return response;
     } catch (error){
         console.error("Error updating the serie", error);
-        throw error;
-    }
-}
-
-
-exports.queryInsertSerieLink = async (link, serie_id) => {
-    const query = 'UPDATE series SET link_url = ? WHERE id = ?';
-    try{
-        const [result] = await pool.execute(query, [link, serie_id]);
-        console.log("Link inserted correctly");
-        return result;
-    } catch(error){
-        console.log("Error inserting the url", error);
-    }
-}
-
-
-// Para eliminar el link
-exports.queryDeleteLink = async (serie_id) => {
-    const query = 'UPDATE series SET link_url = NULL WHERE id = ?';
-    try{
-        const [result] = await pool.execute(query, [serie_id]);
-        console.log("Link deleted successfully.");
-        return result;
-    } catch(error){
-        console.log("Error deleting the link", error);
-    }
-}
-
-
-// Para ponerle otro link
-exports.queryUpdateLink = async (link, serie_id) => {
-    const query = 'UPDATE series SET link_url = ? WHERE id = ?';
-    try{
-        const [result] = await pool.execute(query, [link, serie_id]);
-        console.log("Link updated successfully.");
-        return result;
-    } catch(error){
-        console.error("Error updating the link", error);
         throw error;
     }
 }
