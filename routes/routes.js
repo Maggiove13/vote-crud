@@ -1,41 +1,30 @@
 const express = require('express');
-
-const { registerUser, getUserId} = require("../controllers/userController.js");
-const { insertSerie, getAllSeries, deleteSerie, updateSerie, insertSerieLink, deleteLink, 
-updateLink, incrementVoteCount, renderSeriesPage} = require("../controllers/seriesController.js");
-
-const { insertSeason } = require("../controllers/seasonsController.js");
-
-
-
-//const verifyCreator = require("../middleware/verifyUser.js");
-
 const router = express.Router();
+const seriesController = require('../controllers/seriesController');
 
-router.post('/register',registerUser);
 
-router.post('/series', insertSerie);
+// Ruta para insertar una nueva serie
+router.post('/series', seriesController.insertSerie);
 
-router.get('/series', getAllSeries);
+// Ruta para incrementar el contador de votos de una serie
+router.post('/series/vote', seriesController.incrementVoteCount);
 
-router.put('/series', updateSerie);
+// Ruta para eliminar una serie
+router.post('/series/delete', seriesController.deleteSerie);
 
-router.delete('/series', deleteSerie);
+// Ruta para actualizar una serie específica
+router.post('/series/update/:serie_id', seriesController.updateSerie);
 
-router.post('/series/link', insertSerieLink);
 
-router.delete('/series/link', deleteLink);
+//----------------->   Rutas para vistas
 
-router.put('/series/link', updateLink);
+// Ruta para mostrar la página de edición de una serie específica
+router.get('/series/edit/:serie_id', seriesController.renderEditSeriesPage);
 
-router.post('/series/vote', incrementVoteCount);
+// Ruta para listar todas las series
+router.get('/series', seriesController.renderSeriesPage);
 
-router.post('/series/seasons', insertSeason);
-
-router.get('/', renderSeriesPage);
-
-router.get('/series/add', (req, res) => {
-    res.render('addSeries'); // Renders the form to add a new series
-});
+// Ruta para Visualizar la pagina para agregar series
+router.get('/series/add', seriesController.renderAddSeriePage);
 
 module.exports = router;
