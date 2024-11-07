@@ -8,7 +8,8 @@ const {
     queryDeleteLink, 
     queryUpdateLink, 
     queryVoteCount, 
-    queryGetIdsFromTitle } = require("../models/series.js");
+    queryGetIdsFromTitle,
+    queryGetSerieById} = require("../models/series.js");
 
 const { getUserId } = require("./userController.js");
 
@@ -24,13 +25,16 @@ exports.insertSerie = async (req, res) => {
         }
 
         const titleLower = title.trim().toLowerCase();
+        const newDescription = description?.trim() || null;
+        const newImage = image?.trim() || null;
+        const newLink = link_url?.trim() || null;
 
         const verifyTitleResponse = await queryVerifySeriesTitle(titleLower);
         if (verifyTitleResponse.length > 0){
             return res.status(400).send({message: "Title already exists"});
         }
-
-        const { serie_id, affectedRows } = await queryToInsertSeriesName(titleLower, description || null, user_id, image || null, link_url || null);
+        
+        const { serie_id, affectedRows } = await queryToInsertSeriesName(titleLower, newDescription, user_id, newImage, newLink);
         console.log(affectedRows);
         if (affectedRows === 0) {
             return res.status(400).send({
@@ -113,49 +117,31 @@ exports.deleteSerie = async (req, res) => {
 
 exports.updateSerie = async (req, res) => {
 
-    const { oldTitle, newTitle, newDescription, newImage, newLink } = req.body;
+    const { title, description, image, link, serie_id } = req.body;
 
     try{
 
-        const oldTitleLower = oldTitle.toLowerCase();
-
-        if (!oldTitleLower || oldTitleLower.trim() === ""){
+        if (!title || !title.trim() === ""){
             return res.status(400).send({message: "Title not found"});
         }
 
-        if (!newTitle || newTitle.trim() === "") {
-            return res.status(400).json({ message: "New title is required" });
-        }
-
-        const newTitleLower = newTitle.trim().toLowerCase();
-
-        const responseSerieId = await queryGetIdsFromTitle(oldTitleLower);
-        console.log(`The query response based on the title: ${oldTitleLower} is:`, responseSerieId);
-
-        if (responseSerieId.length === 0) {
-            console.log("Serie_id not found")
-            return res.status(404).send({ message: "Serie not found"});
-        }
-
-        const serie_id = responseSerieId[0].id;
-        console.log(`${oldTitleLower} have id:`, serie_id);
-
-        const description = newDescription?.trim() || null;
-        const image = newImage?.trim() || null;
-        const link = newLink?.trim() || null;
+        const titleLower = title.trim()
+        const newDescription = description?.trim() || null;
+        const newImage = image?.trim() || null;
+        const newLink = link?.trim() || null;
 
 
-        response = await queryUpdateSerie(newTitleLower, description, image , link, serie_id);
+        response = await queryUpdateSerie(titleLower, newDescription, newImage , newLink, serie_id);
         if (response.affectedRows === 0){
             return res.status(400).send({message: "Serie could not be updated"})
         } else {
             return res.status(200).send({status: "Success", message: "Serie successfully updated", 
             dataUpdated: {
                 id: serie_id,
-                Title: newTitleLower,
-                Description: description,
-                Image: image,
-                Link: link
+                Title: titleLower,
+                Description: newDescription,
+                Image: newImage,
+                Link: newLink
             }});
         }
 
