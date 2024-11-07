@@ -40,14 +40,6 @@ exports.insertSerie = async (req, res) => {
             });
         }
         res.redirect('/api/series');
-        return res.status(201).send({
-            status: "Success",
-            message: "Serie successfully inserted", 
-            data: {Title: titleLower,
-                Description: description, 
-                id_Serie: serie_id,
-                User_id: user_id}
-        });
 
     } catch (error){
         console.log("Error inserting a serie:", error);
@@ -80,29 +72,18 @@ exports.getAllSeries = async (req, res) => {
 
 exports.deleteSerie = async (req, res) => {
 
-    const { serie_id, title } = req.body
+    const { serie_id} = req.body
     
     try{
-        if (!serie_id || !title) {
-            return res.status(400).send({message: "Serie_id or title not found"});
+        if (!serie_id) {
+            return res.status(400).send({message: "Serie_id not found"});
         }
 
-        const titleLower = title.trim().toLowerCase();
-
-        const responseAllSeries = await queryToGetAllTitles();
-        const serieExists = responseAllSeries.some(serie => {
-            return serie.title === titleLower;
-        });
-
-        if (!serieExists) {
-            return res.status(404).send({ status: "Not Found", message: "That title doesn't exist"});
-        }
-        
         response = await queryDeleteSerie(serie_id);
         if (response.affectedRows === 0){
-            return res.status(400).send({message: `title ${titleLower} not deleted`});
+            return res.status(400).send({message: `serie not deleted`});
         } else {
-            return res.status(200).send({message: `${titleLower} deleted successfully from the databse`});
+            res.redirect('/api/series');
         }
     } catch(error){
         console.error("Error fetching all the series titles:", error);
@@ -132,16 +113,9 @@ exports.updateSerie = async (req, res) => {
         if (response.affectedRows === 0){
             return res.status(400).send({message: "Serie could not be updated"})
         } else {
-            return res.status(200).send({status: "Success", message: "Serie successfully updated", 
-            dataUpdated: {
-                id: serie_id,
-                Title: titleLower,
-                Description: newDescription,
-                Image: newImage,
-                Link: newLink
-            }});
+            res.redirect('/api/series');
         }
-
+        
     } catch(error){
         console.error("Error during the update:", error);
         return res.status(500).send({message: "Internal server error"});
@@ -279,9 +253,9 @@ exports.renderSeriesPage = async (req, res) => {
 }
 
 exports.renderEditSeriesPage = async (req, res) => {
-    const { id } = req.params;
+    const { serie_id } = req.params;
     try {
-        const serie = await Serie.findByPk(id);
+        const serie = await queryGetSerieById(serie_id);
         res.render('editSeries', { serie });
     } catch (error) {
         res.status(500).send("Error al cargar la página de edición");
