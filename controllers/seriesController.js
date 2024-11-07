@@ -206,19 +206,18 @@ exports.deleteLink = async (req, res) => {
 
 
 exports.updateLink = async (req, res) => {
-    const { title, link } = req.body;
+    const { link, serie_id, title } = req.body;
 
-    if (!title || title.trim() === ""){
-        return res.status(400).send({message: "Title is required to delete a link"});
+    if (!serie_id){
+        return res.status(400).send({message: "serie_id is required to delete a link"});
     }
-    const titleLower = title.trim().toLowerCase();
 
     if (!link){
         return res.status(404).send({status: "NOT FOUND", message: "A link is require"});
     }
     const linkk = link.trim();
     try{
-
+        const titleLower = title.trim().toLowerCase()
         const responseAllSeries = await queryToGetAllTitles();
         const serieExists = responseAllSeries.some(serie => {
             return serie.title === titleLower;
@@ -228,7 +227,7 @@ exports.updateLink = async (req, res) => {
             return res.status(404).send({ status: "NOT FOUND", message: "That title doesn't exist"});
         }
 
-        const responseQueryUpdate = await queryUpdateLink(linkk, titleLower);
+        const responseQueryUpdate = await queryUpdateLink(linkk, serie_id);
         if (responseQueryUpdate. affectedRows === 0){
             return res.status(400).send({message: "No link was updated"});
         }
