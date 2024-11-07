@@ -39,7 +39,7 @@ exports.insertSerie = async (req, res) => {
                 message: "Data not inserted in the table"
             });
         }
-
+        res.redirect('/api/series');
         return res.status(201).send({
             status: "Success",
             message: "Serie successfully inserted", 
@@ -277,3 +277,13 @@ exports.renderSeriesPage = async (req, res) => {
         return res.status(500).send({message: "Internal server error"});
     }
 }
+
+exports.renderEditSeriesPage = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const serie = await Serie.findByPk(id);
+        res.render('editSeries', { serie });
+    } catch (error) {
+        res.status(500).send("Error al cargar la página de edición");
+    }
+};
