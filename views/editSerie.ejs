@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Serie</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-4xl font-bold text-center text-gray-800 mb-10">Edit Serie</h1>
+        <% serie.forEach(serie => { %>
+            <form action="/api/series/update/<%= serie.id %>" method="POST" class="max-w-2xl mx-auto bg-white p-6 rounded-lg shadow-md">
+                    <input type="hidden" name="serie_id" value="<%= serie.id %>">
+                        <div class="mb-4">
+                            <label for="title" class="block text-sm font-medium text-gray-700">Título</label>
+                            <input type="text" name="title" id="title" value="<%= serie.title %>" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm">
+                        </div>
+                        <div class="mb-4">
+                            <label for="description" class="block text-sm font-medium text-gray-700">Descripción</label>
+                            <textarea name="description" id="description" rows="3" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"><%= serie.description %></textarea>
+                        </div>
+                        <div class="mb-4">
+                            <label for="image" class="block text-sm font-medium text-gray-700">URL de la Imagen</label>
+                            <input type="text" name="image" id="image" value="<%= serie.image %>" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm">
+                        </div>
+                        <div class="mb-4">
+                            <label for="link_url" class="block text-sm font-medium text-gray-700">URL de Enlace</label>
+                            <input type="text" name="link_url" id="link_url" value="<%= serie.link_url %>" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm">
+                        </div>
+                        <div class="flex justify-end">
+                            <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600">Actualizar Serie</button>
+                        </div>
+            </form>
+        <% }) %>
+    </div>
+</body>
+</html>
