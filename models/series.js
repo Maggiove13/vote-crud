@@ -83,7 +83,6 @@ exports.queryDeleteSerie = async (serie_id) => {
 }
 
 
-// Para que un usuario pueda actualizar el nombre de una serie
 exports.queryUpdateSerie = async (title, description, image, link, serie_id) => {
     const query = 'UPDATE series SET title = ?, description = ?, image = ?, link_url = ? WHERE id = ?';
 
@@ -98,10 +97,10 @@ exports.queryUpdateSerie = async (title, description, image, link, serie_id) => 
 }
 
 
-exports.queryInsertIntoSeriesLink = async (link, title) => {
-    const query = 'UPDATE series SET link_url = ? WHERE title = ?';
+exports.queryInsertSerieLink = async (link, serie_id) => {
+    const query = 'UPDATE series SET link_url = ? WHERE id = ?';
     try{
-        const [result] = await pool.execute(query, [link, title]);
+        const [result] = await pool.execute(query, [link, serie_id]);
         console.log("Link inserted correctly");
         return result;
     } catch(error){
