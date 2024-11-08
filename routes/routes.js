@@ -4,7 +4,7 @@ const seriesController = require('../controllers/seriesController');
 
 
 // Ruta para insertar una nueva serie
-router.post('/series', seriesController.insertSerie);
+router.post('/series/create', seriesController.insertSerie);
 
 // Ruta para incrementar el contador de votos de una serie
 router.post('/series/vote', seriesController.incrementVoteCount);
@@ -25,6 +25,6 @@ router.get('/series/edit/:serie_id', seriesController.renderEditSeriesPage);
 router.get('/series', seriesController.renderSeriesPage);
 
 // Ruta para Visualizar la pagina para agregar series
-router.get('/series/add', seriesController.renderAddSeriePage);
+router.get('/series/insert', seriesController.renderAddSeriePage);
 
 module.exports = router;
