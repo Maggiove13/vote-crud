@@ -1,23 +1,55 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
-    <link rel="stylesheet" href="/css/styles.css">
+    <title>Series</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-<body>
-    <div class="wrapper-card">
-        <% allSeries.forEach(serie => { %>
-            <div>
-                <img src="<%= serie.image %>" alt="<%= serie.title %>">
-                <p><%= serie.title %></p>
-                <form action='series/vote' method="post">
-                    <button type="submit" ><%= serie.vote_count %></button>
-                    <input type="hidden" name="title" value="<%= serie.title %>"> 
-                </form>
-            </div>
-        <% }) %>
+<body class="bg-gray-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Título -->
+        <h1 class="text-4xl font-bold text-center text-gray-800 mb-10">Your favourites series</h1>
+        <div class="mb-4">
+            <a href="/api/series/insert"></a>
+            <button onclick="window.location.href='/api/series/insert'" class="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600">
+                <i class="fas fa-plus"></i> Add a new serie
+            </button>
+        </div>
+        
+        <!-- Lista de series -->
+        <ul class="max-w-2xl mx-auto space-y-4">
+            <% allSeries.forEach(serie => { %>
+                <li class="bg-white rounded-lg shadow-md p-6 flex justify-between items-center">
+                    <div class="wrapper-card">
+                        <img class="items-baseline size-1/2" src="<%= serie.image %>">
+                        <div class="flex-4">
+                            <h3 class="text-xl font-semibold py-2 px-4 max-w-2xl mx-auto space-y-4"><%= serie.title %></h3>
+                            <a href="<%= serie.link_url %>" target="_blank" rel="noopener noreferrer"></a>
+                            <p class="text-right"><%= serie.description %></p>
+                            <p class="text-right">Votos: <%= serie.vote_count %></p>
+                        </div>
+                    </div>
+                    <form action="/api/series/vote" method="POST">
+                        <input type="hidden" name="title" value="<%= serie.title %>">
+                        <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600">
+                            <i class="fas fa-thumbs-up"></i> Vote
+                        </button>
+                    </form>
+                    <a href="/api/series/edit/<%= serie.id %>" class="text-green-500 ml-4">
+                        <i class="fas fa-edit"></i> Edit
+                    </a>
+                    <!-- Botón de eliminar -->
+                    <form action="/api/series/delete" method="POST">
+                        <input type="hidden" name="serie_id" value="<%= serie.id %>">
+                        <button type="submit" class="text-red-500">
+                            <i class="fas fa-trash-alt"></i> Delete
+                        </button>
+                    </form>
+                </li>
+            <% }) %>
+        </ul>
     </div>
 </body>
 </html>
