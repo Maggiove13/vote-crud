@@ -4,14 +4,9 @@ const {
     queryToGetAllTitles, 
     queryDeleteSerie, 
     queryUpdateSerie, 
-    queryInsertSerieLink, 
-    queryDeleteLink, 
-    queryUpdateLink, 
     queryVoteCount, 
-    queryGetIdsFromTitle,
     querySerieById} = require("../models/series.js");
 
-    const userController = require('../models/users.js');
 
 exports.insertSerie = async (req, res) => {
     const { title, description, image, link_url } = req.body;
@@ -50,7 +45,6 @@ exports.insertSerie = async (req, res) => {
 }
 
 
-
 exports.getAllSeries = async (req, res) => {
     try{
         const responseAllSeries = await queryToGetAllTitles();
@@ -69,7 +63,6 @@ exports.getAllSeries = async (req, res) => {
         return res.status(500).send({message: "Internal server error"});
     }
 }
-
 
 
 exports.deleteSerie = async (req, res) => {
