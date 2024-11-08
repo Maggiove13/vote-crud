@@ -28,7 +28,7 @@ exports.insertSerie = async (req, res) => {
         const newImage = image?.trim() || null;
         const newLink = link_url?.trim() || null;
 
-        const verifyTitleResponse = await queryVerifySeriesTitle(titleLower);
+        const verifyTitleResponse = await queryVerifySeriesTitle(titleUpper);
         if (verifyTitleResponse.length > 0){
             return res.status(400).send({message: "Title already exists"});
         }
@@ -175,4 +175,9 @@ exports.renderEditSeriesPage = async (req, res) => {
         console.error("Error loading the edition page:", error);
         return res.status(500).send("Error updating the serie", serie_id);
     }
+};
+
+
+exports.renderAddSeriePage = (req, res) => {
+    res.render('addSeries'); 
 };
