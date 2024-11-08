@@ -94,7 +94,6 @@ exports.deleteSerie = async (req, res) => {
 }
 
 
-
 exports.updateSerie = async (req, res) => {
     const { title, description, image, link_url} = req.body;
     const { serie_id } = req.params;
