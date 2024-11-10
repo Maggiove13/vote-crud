@@ -15,7 +15,7 @@ exports.insertSerie = async (req, res) => {
         
         if (!title || title.trim() === ""){
             console.log("Title not found");
-            return res.status(400).send({status: "Error", message: "A title is required"});
+            return res.status(400).json({status: "Error", message: "A title is required"});
         }
 
         const titleUpper = title.trim().toUpperCase();
@@ -25,13 +25,13 @@ exports.insertSerie = async (req, res) => {
 
         const verifyTitleResponse = await queryVerifySeriesTitle(titleUpper);
         if (verifyTitleResponse.length > 0){
-            return res.status(400).send({message: "Title already exists"});
+            return res.status(400).json({message: "Title already exists"});
         }
         
         const { serie_id, affectedRows } = await queryToInsertSeriesName(titleUpper, newDescription, newImage, newLink);
         console.log(affectedRows);
         if (affectedRows === 0) {
-            return res.status(400).send({
+            return res.status(400).json({
                 status: "Error inserting data",
                 message: "Data not inserted in the table"
             });
@@ -40,7 +40,7 @@ exports.insertSerie = async (req, res) => {
 
     } catch (error){
         console.log("Error inserting a serie:", error);
-        res.status(500).send({message: "Internal server error"});
+        res.status(500).json({message: "Internal server error"});
     }
 }
 
@@ -51,16 +51,16 @@ exports.getAllSeries = async (req, res) => {
 
         if (responseAllSeries.length > 0){
             console.log("Series retrieved:", responseAllSeries);
-            return res.status(201).send({
+            return res.status(201).json({
                 message: "Successfully retrieved all the series", 
                 data: responseAllSeries
             })
         } else {
-            return res.status(404).send({message: "No series found"});
+            return res.status(404).json({message: "No series found"});
         }
     } catch(error){
         console.log("Error fetching all the series data:", error);
-        return res.status(500).send({message: "Internal server error"});
+        return res.status(500).json({message: "Internal server error"});
     }
 }
 
@@ -71,18 +71,18 @@ exports.deleteSerie = async (req, res) => {
     
     try{
         if (!serie_id) {
-            return res.status(400).send({message: "Serie_id not found"});
+            return res.status(400).json({message: "Serie_id not found"});
         }
 
         response = await queryDeleteSerie(serie_id);
         if (response.affectedRows === 0){
-            return res.status(400).send({message: `serie not deleted`});
+            return res.status(400).json({message: `serie not deleted`});
         } else {
             res.redirect('/api/series');
         }
     } catch(error){
         console.error("Error fetching all the series titles:", error);
-        return res.status(500).send({message: "Internal server error"});
+        return res.status(500).json({message: "Internal server error"});
     }
 }
 
@@ -124,7 +124,7 @@ exports.updateSerie = async (req, res) => {
 
 exports.incrementVoteCount = async (req, res) => {
     const { title } = req.body;
-    const back = req.header("Referer");
+    //const back = req.header("Referer");
 
     if (!title || title.trim() === "") {
         return res.status(400).json({message: "A title is required to vote for a serie"});
@@ -138,7 +138,7 @@ exports.incrementVoteCount = async (req, res) => {
         
     } catch(error){
         console.error("Error incrementando el contador de votos:", error);
-        return res.status(500).send({message: "Internal server error"});
+        return res.status(500).json({message: "Internal server error"});
     }
 }
 
@@ -150,7 +150,7 @@ exports.renderSeriesPage = async (req, res) => {
         res.render("index", {allSeries});
     } catch (error) {
         console.error("Error while rendering the page:", error);
-        return res.status(500).send({message: "Internal server error"});
+        return res.status(500).json({message: "Internal server error"});
     }
 }
 
@@ -163,13 +163,13 @@ exports.renderEditSeriesPage = async (req, res) => {
         console.log("Datos de objeto serie:", serie);
         
         if (!serie) {
-            return res.status(404).send("Serie no encontrada");
+            return res.status(404).json("Serie no encontrada");
         }
         
         res.render('editSerie', { serie });
     } catch (error) {
         console.error("Error loading the edition page:", error);
-        return res.status(500).send("Error updating the serie", serie_id);
+        return res.status(500).json("Error updating the serie", serie_id);
     }
 };
 
