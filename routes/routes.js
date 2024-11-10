@@ -26,9 +26,12 @@ router.get('/series/edit/:serie_id', seriesController.renderEditSeriesPage);
 // Ruta para listar todas las series
 router.get('/series', seriesController.renderSeriesPage);
 
+router.get('/series/ordered', seriesController.orderedSeries);
+
 // Ruta para Visualizar la pagina para agregar series
 router.get('/series/insert', seriesController.renderAddSeriePage);
 
 router.get('/series/seasons/:serie_id', seasonsController.renderAllSeasons);
+
 
 module.exports = router;

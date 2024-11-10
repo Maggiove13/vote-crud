@@ -177,3 +177,20 @@ exports.renderEditSeriesPage = async (req, res) => {
 exports.renderAddSeriePage = (req, res) => {
     res.render('addSeries'); 
 };
+
+
+exports.orderedSeries = async (req, res) => {
+    try {
+        const serie = await queryGetSeriesOrderByVotes(); 
+        console.log("Datos de objeto serie:", serie);
+        
+        if (!serie || serie.length === 0) {
+            return res.status(404).json({ message: "No se encontraron series" });
+        } else {
+            return res.json(serie); 
+        }
+    } catch (error) {
+        console.error("Error ordenando las series:", error);
+        return res.status(500).json({ message: "Error al ordenar las series", error: error.message }); // Más detalles sobre el error
+    }
+};
