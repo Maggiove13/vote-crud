@@ -44,6 +44,14 @@
                                     <i class="fas fa-external-link-alt mr-2"></i>Visit Page
                                 </a>
 
+                                <!--Boton para acceder a todas las seasons de una serie -->
+                                <form action="/api/series/seasons/<%= serie.id %>" method="get" class="max-w-2xl mx-auto bg-white p-6 rounded-lg">
+                                    <input type="hidden" name="serie_id" value="<%= serie.id %>">
+                                    <div class="flex justify-end">
+                                        <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600">All Seasons</button>
+                                    </div>
+                                </form>
+
                                 <div class="flex items-center space-x-4">
                                     <!-- Botón de votar -->
                                     <form action="/api/series/vote" method="POST" class="inline">
