@@ -11,12 +11,10 @@
 <body class="bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen">
     <div class="container mx-auto px-4 py-12">
 
-        <!-- Header con diseño mejorado -->
         <header class="text-center mb-16">
             <h1 class="text-5xl font-bold text-gray-800 mb-4">Your Favourite Series</h1>
         </header>
 
-        <!-- Lista de series mejorada -->
         <ul class="max-w-6xl mx-auto space-y-8">
             <% allSeries.forEach(serie => { %>
                 <li class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
@@ -27,7 +25,7 @@
                                 src="<%= serie.image %>" alt="<%= serie.title %>">
                         </div>
 
-                        <!-- Contenido -->
+                        <!-- titulo de la serie -->
                         <div class="md:col-span-2">
                             <div class="flex justify-between items-start mb-4">
                                 <h3 class="text-2xl font-bold text-gray-800 font-sans"><%= serie.title %></h3>
@@ -38,7 +36,7 @@
 
                             <p class="text-gray-600 leading-relaxed mb-6 font-serif"><%= serie.description %></p>
 
-                            <!-- Enlaces y acciones -->
+                            <!-- link  -->
                             <div class="flex items-center justify-between mt-auto">
                                 <a href="<%= serie.link_url %>" target="_blank" rel="noopener noreferrer" class="inline-flex items-center text-blue-500 hover:text-blue-600 transition-colors">
                                     <i class="fas fa-external-link-alt mr-2"></i>Visit Page
@@ -117,7 +115,7 @@
                     const updatedVotes = await response.json();
                     const voteCountElement = document.getElementById(`vote-number-${title}`);
                     if (voteCountElement) {
-                        voteCountElement.innerText = updatedVotes.vote_count; // Actualizar solo el número de votos
+                        voteCountElement.innerText = updatedVotes.vote_count; 
                     }
                 } else {
                     alert('Error voting for the series');
