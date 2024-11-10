@@ -29,4 +29,6 @@ router.get('/series', seriesController.renderSeriesPage);
 // Ruta para Visualizar la pagina para agregar series
 router.get('/series/insert', seriesController.renderAddSeriePage);
 
+router.get('/series/seasons/:serie_id', seasonsController.renderAllSeasons);
+
 module.exports = router;
