@@ -1,7 +1,7 @@
 const { 
     queryToInsertSeriesName, 
     queryVerifySeriesTitle, 
-    queryToGetAllTitles, 
+    queryGetSeriesOrderByVotes, 
     queryDeleteSerie, 
     queryUpdateSerie, 
     queryVoteCount, 
@@ -47,7 +47,7 @@ exports.insertSerie = async (req, res) => {
 
 exports.getAllSeries = async (req, res) => {
     try{
-        const responseAllSeries = await queryToGetAllTitles();
+        const responseAllSeries = await queryGetSeriesOrderByVotes();
 
         if (responseAllSeries.length > 0){
             console.log("Series retrieved:", responseAllSeries);
@@ -145,7 +145,7 @@ exports.incrementVoteCount = async (req, res) => {
 
 exports.renderSeriesPage = async (req, res) => {
     try {
-        const allSeries = await queryToGetAllTitles();
+        const allSeries = await queryGetSeriesOrderByVotes();
         console.log("All the series:", allSeries);
         res.render("index", {allSeries});
     } catch (error) {
