@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const seriesController = require('../controllers/seriesController');
+const seasonsController = require('../controllers/seasonsController');
 
 
 // Ruta para insertar una nueva serie
@@ -15,6 +16,7 @@ router.post('/series/delete', seriesController.deleteSerie);
 // Ruta para actualizar una serie específica
 router.post('/series/update/:serie_id', seriesController.updateSerie);
 
+router.post('/series/seasons/all/:serie_id/vote', seasonsController.incrementVoteCount);
 
 //----------------->   Rutas para vistas
 
