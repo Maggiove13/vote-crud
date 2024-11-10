@@ -19,6 +19,7 @@
                         <div class="mb-4">
                             <label for="description" class="block text-sm font-medium text-gray-700">Descripción</label>
                             <textarea name="description" id="description" rows="3" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"><%= serie.description %></textarea>
+                            <p id="charCount" class="text-sm text-red-500 mt-2">remaining characters: <span id="remainingChars">255</span></p>
                         </div>
                         <div class="mb-4">
                             <label for="image" class="block text-sm font-medium text-gray-700">URL de la Imagen</label>
@@ -34,5 +35,24 @@
             </form>
         <% }) %>
     </div>
+    <script>
+
+        const maxLength = 255; 
+        const descriptionInput = document.getElementById('description');
+        const remainingChars = document.getElementById('remainingChars');
+
+        descriptionInput.addEventListener('input', () => {
+            const currentLength = descriptionInput.value.length;
+            const remaining = maxLength - currentLength;
+            remainingChars.textContent = remaining;
+
+            if (remaining < 0) {
+                remainingChars.classList.add('text-red-500');
+            } else {
+                remainingChars.classList.remove('text-red-500');
+            }
+        });
+
+    </script>
 </body>
 </html>
