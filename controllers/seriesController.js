@@ -97,11 +97,11 @@ exports.updateSerie = async (req, res) => {
 
     try{
         if (!title || title.trim() === ""){
-            return res.status(400).send({message: "Title not found"});
+            return res.status(400).json({message: "Title not found"});
         }
 
         if (!serie_id){
-            return res.status(400).send({message: "serie_id not found"});
+            return res.status(400).json({message: "serie_id not found"});
         }
 
         const titleUpper = title.trim().toUpperCase();
@@ -111,27 +111,31 @@ exports.updateSerie = async (req, res) => {
 
         const response = await queryUpdateSerie(titleUpper, newDescription, newImage, newLink, serie_id);
         if (response.affectedRows === 0){
-            return res.status(400).send({message: "Serie could not be updated"});
+            return res.status(400).json({message: "Serie could not be updated"});
         } else {
             res.redirect('/api/series');
         }
     } catch(error){
         console.error("Error during the update:", error);
-        return res.status(500).send({message: "Internal server error"});
+        return res.status(500).json({message: "Internal server error"});
     }
 }
+
 
 exports.incrementVoteCount = async (req, res) => {
     const { title } = req.body;
     const back = req.header("Referer");
 
     if (!title || title.trim() === "") {
-        return res.status(400).send({message: "A title is required to vote for a serie"});
+        return res.status(400).json({message: "A title is required to vote for a serie"});
     }
-    const titleLower = title.trim().toLowerCase();
+
+    const titleUpper = title.trim().toUpperCase();
     try{
-        await queryVoteCount(titleLower);
-        res.redirect(back);
+        const updatedSerie = await queryVoteCount(titleUpper);
+        console.log(updatedSerie);
+        res.json({ vote_count: updatedSerie[0].vote_count });
+        
     } catch(error){
         console.error("Error incrementando el contador de votos:", error);
         return res.status(500).send({message: "Internal server error"});
