@@ -31,7 +31,7 @@
                         <div class="md:col-span-2">
                             <div class="flex justify-between items-start mb-4">
                                 <h3 class="text-2xl font-bold text-gray-800 font-sans"><%= serie.title %></h3>
-                                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">
+                                <span id="vote-count-<%= serie.title %>" class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">
                                     <i class="fas fa-star text-yellow-400"></i><%= serie.vote_count %> votes
                                 </span>
                             </div>
@@ -44,7 +44,7 @@
                                     <i class="fas fa-external-link-alt mr-2"></i>Visit Page
                                 </a>
 
-                                <!--Boton para acceder a todas las seasons de una serie -->
+                                <!--Boton para acceder a todas las seasons de una series-->
                                 <form action="/api/series/seasons/<%= serie.id %>" method="get" class="max-w-2xl mx-auto bg-white p-6 rounded-lg">
                                     <input type="hidden" name="serie_id" value="<%= serie.id %>">
                                     <div class="flex justify-end">
@@ -56,7 +56,7 @@
                                     <!-- Botón de votar -->
                                     <form action="/api/series/vote" method="POST" class="inline">
                                         <input type="hidden" name="title" value="<%= serie.title %>">
-                                        <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg transition-colors duration-300">
+                                        <button type="button" onclick="voteForSeries('<%= serie.title %>')" class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg transition-colors duration-300">
                                             <i class="fas fa-thumbs-up mr-2"></i>Vote
                                         </button>
                                     </form>
@@ -89,8 +89,30 @@
                 Add a New Serie
             </button>
         </div>
-
     </div>
+    
+    <script>
+        async function voteForSeries(title) {
+            try {
+                const response = await fetch('/api/series/vote', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ title })
+                });
+    
+                if (response.ok) {
+                    const updatedVotes = await response.json();
+                    document.getElementById(`vote-count-${title}`).innerText = `${updatedVotes.vote_count} votes`;
+                } else {
+                    alert('Error voting for the series');
+                }
+            } catch (error) {
+                console.error('Error during voting:', error);
+            }
+        }
+    </script>
 </body>
 </html>
 
