@@ -110,7 +110,7 @@ exports.queryVoteCount = async (title) => {
         const [response] = await pool.execute(selectQuery, [title]);
         return response; 
     } catch (error) {
-        console.log("Error updating the vote count", error);
+        console.error("Error updating the vote count", error);
         throw error; 
     };
 }
