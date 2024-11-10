@@ -10,3 +10,19 @@ exports.queryVoteCountSeasons = async (season_id) => {
         console.log("Error updating the vote count in seasons", error);
     }
 }
+
+
+exports.queryGetAllSeasons = async (serie_id) => {
+    const query = `SELECT seasons.*, series.title
+    FROM seasons
+    INNER JOIN series ON series.id = seasons.serie_id
+    WHERE series.id = ?`;
+
+    try {
+        const [response] = await pool.execute(query, [serie_id]);
+        console.log("All seasons retrieved correctly");
+        return response;
+    } catch(error) {
+        console.log("Error retrieving data from seasons table", error);
+    }
+}
