@@ -182,7 +182,7 @@ exports.renderAddSeriePage = (req, res) => {
 exports.orderedSeries = async (req, res) => {
     try {
         const seriesList = await queryGetSeriesOrderByVotes(); 
-        console.log("Datos de objeto serie:", serie);
+        console.log("Datos de objeto serie:", seriesList);
         
         if (!seriesList || seriesList.length === 0) {
             return res.status(404).json({ message: "No se encontraron series" });
