@@ -10,3 +10,15 @@ exports.queryCreateSession = async (user_id) => {
         throw error;
     }
 }
+
+
+exports.queryDeleteSession = async (session_id) => {
+    const query = 'DELETE FROM sessions WHERE id = ?';
+    try {
+        const [ response ] = await pool.execute(query, [session_id]);
+        return response;
+    } catch (error) {
+        console.error("Error in queryCreateSession:", error);
+        throw error;
+    }
+}
