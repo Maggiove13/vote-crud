@@ -22,3 +22,15 @@ exports.queryDeleteSession = async (session_id) => {
         throw error;
     }
 }
+
+
+exports.queryGetSession = async (session_id) => {
+    const query = 'SELECT * FROM sessions WHERE id = ?';
+    try {
+        const [ response ] = await pool.execute(query, [session_id]);
+        return response;
+    } catch (error) {
+        console.error("Error in queryCreateSession:", error);
+        throw error;
+    }
+}
