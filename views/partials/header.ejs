@@ -5,6 +5,7 @@
             <li><a href="/api/login" class="text-white hover:text-blue-500 transition-colors duration-300">Login</a></li>
             <li>
                 <form action="/api/logout" method="post" class="inline">
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                     <button type="submit" class="text-white hover:text-red-600">Log Out</button>
                 </form>
             </li>
