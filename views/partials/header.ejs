@@ -1,0 +1,13 @@
+<nav class="bg-blue-500 text-white shadow-md rounded-lg">
+    <div class="container mx-auto px-4 py-4 flex justify-between items-center rounded-lg">
+        <ul class="flex space-x-4">
+            <li><a href="/api/register" class="text-white hover:text-blue-500 transition-colors duration-300">Register</a></li>
+            <li><a href="/api/login" class="text-white hover:text-blue-500 transition-colors duration-300">Login</a></li>
+            <li>
+                <form action="/api/logout" method="post" class="inline">
+                    <button type="submit" class="text-white hover:text-red-600">Log Out</button>
+                </form>
+            </li>
+        </ul>
+    </div>
+</nav>
