@@ -2,7 +2,11 @@ const express = require('express');
 const router = express.Router();
 const seriesController = require('../controllers/seriesController');
 const seasonsController = require('../controllers/seasonsController');
+const userController = require('../controllers/usersController.js');
+const Auth = require('../middleware/authorization.js');
 
+
+router.post('/register', userController.registerUser );
 
 // Ruta para insertar una nueva serie
 router.post('/series/create', seriesController.insertSerie);
