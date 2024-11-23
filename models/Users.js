@@ -27,5 +27,16 @@ exports.queryVerifyUser = async(email) => {
 }
 
 
+exports.queryGetUserId = async(user_name) => {
+    const query = 'SELECT id FROM users WHERE user_name = ?';
+
+    try{
+        const [response] = await pool.execute(query, [user_name]);
+        return response;
+    } catch (error) {
+        console.error(`Error retreiving the id from the user ${user_name}: ${error}`);
+        throw error;
+    }
+}
 
 
