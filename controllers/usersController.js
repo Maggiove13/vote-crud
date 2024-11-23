@@ -46,3 +46,64 @@ exports.registerUser = async (req, res) => {
     }
 }
 
+
+exports.login = async (req, res) => {
+    const { email, password, rememberMe } = req.body;
+
+    try {
+        const existingUser  = await Users.queryVerifyUser (email);
+        if (existingUser .length === 0) {
+            return res.redirect('/api/login?error=userNotFound');
+        }
+
+        const user = existingUser [0];
+
+        // Verificar la contraseña
+        const valid = await bcrypt.compare(password, user.password);
+        if (!valid) {
+            return res.redirect('/api/login?error=invalidPassword');
+        }
+
+        const JWT_SECRET = process.env.JWT_SECRET;
+        const JWT_EXPIRES = process.env.JWT_EXPIRES;
+        const tokenPayload = { id: user.id, role: user.role, email: user.email };
+
+        const token = jwt.sign(tokenPayload, JWT_SECRET, { expiresIn: JWT_EXPIRES });
+
+        if (rememberMe === 'true') {
+            req.session.user = {
+                id: user.id,
+                role: user.role,
+                email: user.email,
+            };
+
+            req.session.save((err) => {
+                if (err) {
+                    console.error("Error al guardar la sesión:", err);
+                    return res.status(500).json({ message: "Error while saving session" });
+                }
+
+                // res.cookie("sessionId", req.session.user, {
+                //     httpOnly: true,
+                //     secure: true,
+                //     sameSite: "strict",
+                //     maxAge: 1000 * 60 * 60 * 24, // 1 día
+                // });
+                
+                res.redirect('/api/series');
+            });
+        } else {
+            // Autenticación sin estado con JWT
+            res.cookie("authToken", token, {
+                httpOnly: true,
+                secure: true,
+                sameSite: "strict",
+            });
+            
+            res.redirect('/api/series');
+        }
+    } catch (error) {
+        console.error("Error during login:", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+};
