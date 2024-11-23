@@ -107,3 +107,18 @@ exports.login = async (req, res) => {
         res.status(500).json({ message: "Internal server error" });
     }
 };
+
+
+exports.logout = (req, res) => {
+    req.session.destroy(err => {
+        if (err) {
+            return res.status(500).send({ message: "Error while logging out" });
+        }
+
+        //res.clearCookie("sessionId");
+        res.clearCookie("session_id");
+        res.clearCookie("authToken");
+        console.log("Logout exitoso");
+        res.redirect('/api/login'); 
+    });
+};
