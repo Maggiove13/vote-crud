@@ -2,6 +2,7 @@ const express = require("express");
 const dotenv = require("dotenv");
 const router = require("./routes/routes.js");
 const { checkDatabaseConnection } = require("./models/models.js"); 
+const cookieParser = require('cookie-parser');
 
 dotenv.config()
 
