@@ -8,6 +8,7 @@ const Auth = require('../middleware/authorization.js');
 
 router.post('/register', userController.registerUser );
 router.post('/login', Auth.limiter, userController.login);
+router.post('/logout', userController.logout);
 
 // Ruta para insertar una nueva serie
 router.post('/series/create', seriesController.insertSerie);
