@@ -10,8 +10,8 @@
 
 <body class="bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen">
     <div class="container mx-auto px-4 py-12">
-
         <header class="text-center mb-16">
+            <%- include('./partials/header'); %>
             <h1 class="text-5xl font-bold text-gray-800 mb-4">Your Favourite Series</h1>
         </header>
 
@@ -19,53 +19,42 @@
             <% allSeries.forEach(serie => { %>
                 <li class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 p-6">
-                        <!-- Imagen -->
                         <div class="md:col-span-1">
                             <img class="w-full h-64 object-cover rounded-lg shadow" 
                                 src="<%= serie.image %>" alt="<%= serie.title %>">
                         </div>
-
-                        <!-- titulo de la serie -->
                         <div class="md:col-span-2">
                             <div class="flex justify-between items-start mb-4">
                                 <h3 class="text-2xl font-bold text-gray-800 font-sans"><%= serie.title %></h3>
                                 <span id="vote-count-<%= serie.title %>" class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">
-                                    <i class="fas fa-star text-yellow-400"></i><%= serie.vote_count %> votes: 
+                                    <i class="fas fa-star text-yellow-400"></i> 
+                                    <span id="vote-number-<%= serie.title %>"><%= serie.vote_count %></span> votes
                                 </span>
                             </div>
-
                             <p class="text-gray-600 leading-relaxed mb-6 font-serif"><%= serie.description %></p>
-
-                            <!-- link  -->
                             <div class="flex items-center justify-between mt-auto">
                                 <a href="<%= serie.link_url %>" target="_blank" rel="noopener noreferrer" class="inline-flex items-center text-blue-500 hover:text-blue-600 transition-colors">
                                     <i class="fas fa-external-link-alt mr-2"></i>Visit Page
                                 </a>
-
-                                <!--Boton para acceder a todas las seasons de una series-->
                                 <form action="/api/series/seasons/<%= serie.id %>" method="get" class="max-w-2xl mx-auto bg-white p-6 rounded-lg">
                                     <input type="hidden" name="serie_id" value="<%= serie.id %>">
                                     <div class="flex justify-end">
                                         <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600">All Seasons</button>
                                     </div>
                                 </form>
-
                                 <div class="flex items-center space-x-4">
-                                    <!-- Botón de votar -->
                                     <form action="/api/series/vote" method="POST" class="inline">
+                                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                                         <input type="hidden" name="title" value="<%= serie.title %>">
                                         <button type="button" onclick="voteForSeries('<%= serie.title %>')" class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg transition-colors duration-300">
                                             <i class="fas fa-thumbs-up mr-2"></i>Vote
                                         </button>
                                     </form>
-
-                                    <!-- Botón de editar -->
                                     <a href="/api/series/edit/<%= serie.id %>" class="text-green-500 hover:text-green-600 transition-colors">
                                         <i class="fas fa-edit"></i>
                                     </a>
-
-                                    <!-- Botón de eliminar -->
                                     <form action="/api/series/delete" method="POST" class="inline">
+                                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                                         <input type="hidden" name="serie_id" value="<%= serie.id %>">
                                         <button type="submit" class="text-red-500 hover:text-red-600 transition-colors">
                                             <i class="fas fa-trash-alt"></i>
@@ -78,9 +67,7 @@
                 </li>
             <% }) %>
         </ul>
-
-
-        <!-- Botón de agregar nueva serie-->
+        
         <div class="max-w-6xl mx-auto mb-12">
             <button onclick="window.location.href='/api/series/insert'" class="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 mt-6 flex items-center gap-2">
                 <i class="fas fa-plus mr-2"></i>
@@ -88,48 +75,61 @@
             </button>
         </div>
     </div>
-    
+
     <script>
+        const csrfToken = "<%= csrfToken %>";
+        
         async function voteForSeries(title) {
+            if (!title) {
+                console.error('El título de la serie es nulo o vacío');
+                return;
+            }
+
             try {
-                const response = await fetch('/api/series/vote', {
+                // Realizar el voto
+                const voteResponse = await fetch('/api/series/vote', {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'X-CSRF-Token': csrfToken
                     },
                     body: JSON.stringify({ title })
                 });
-    
-                if (response.ok) {
-                    // Obtener la lista de series ordenadas y actualizar la lista
-                    const orderedSeriesResponse = await fetch('/api/series/ordered');
 
-                    if (orderedSeriesResponse.ok) {
-                        const orderedSeries = await orderedSeriesResponse.json();
-                        updateSeriesList(orderedSeries); 
-                        console.error('Error al obtener series ordenadas');
-                    }
-                    
-
-                    // Actualizar el contador de votos en la interfaz
-                    const updatedVotes = await response.json();
-                    const voteCountElement = document.getElementById(`vote-number-${title}`);
-                    if (voteCountElement) {
-                        voteCountElement.innerText = updatedVotes.vote_count; 
-                    }
-                } else {
-                    alert('Error voting for the series');
+                if (!voteResponse.ok) {
+                    const errorData = await voteResponse.json();
+                    throw new Error(errorData.message || 'Error voting for the series');
                 }
+
+                const voteData = await voteResponse.json();
+                
+                
+                const voteCountElement = document.querySelector(`#vote-number-${title}`);
+                if (voteCountElement) {
+                    voteCountElement.textContent = voteData.vote_count;
+                }
+
+                
+                const orderedResponse = await fetch('/api/series/ordered');
+                if (!orderedResponse.ok) {
+                    throw new Error('Error al obtener series ordenadas');
+                }
+
+                const orderedSeries = await orderedResponse.json();
+                updateSeriesList(orderedSeries);
+
             } catch (error) {
                 console.error('Error during voting:', error);
+                alert('Error: ' + error.message);
             }
         }
-    
-        // Función para actualizar la lista de series en tiempo real
+
         function updateSeriesList(series) {
-            const seriesList = document.querySelector('ul'); // Selecciona la lista de series
-            seriesList.innerHTML = ''; // Limpiar la lista existente
-    
+            const seriesList = document.querySelector('ul.max-w-6xl');
+            if (!seriesList) return;
+
+            seriesList.innerHTML = '';
+
             series.forEach(serie => {
                 const listItem = document.createElement('li');
                 listItem.className = 'bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300';
@@ -142,7 +142,8 @@
                             <div class="flex justify-between items-start mb-4">
                                 <h3 class="text-2xl font-bold text-gray-800 font-sans">${serie.title}</h3>
                                 <span id="vote-count-${serie.title}" class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">
-                                    <i class="fas fa-star text-yellow-400"></i><span id="vote-number-${serie.title}">${serie.vote_count}</span> votes
+                                    <i class="fas fa-star text-yellow-400"></i> 
+                                    <span id="vote-number-${serie.title}">${serie.vote_count}</span> votes
                                 </span>
                             </div>
                             <p class="text-gray-600 leading-relaxed mb-6 font-serif">${serie.description}</p>
@@ -164,6 +165,7 @@
                                         <i class="fas fa-edit"></i>
                                     </a>
                                     <form action="/api/series/delete" method="POST" class="inline">
+                                        <input type="hidden" name="_csrf" value="${csrfToken}">
                                         <input type="hidden" name="serie_id" value="${serie.id}">
                                         <button type="submit" class="text-red-500 hover:text-red-600 transition-colors">
                                             <i class="fas fa-trash-alt"></i>
@@ -172,12 +174,10 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                `;
-                seriesList.appendChild(listItem); // Añadir el nuevo item a la lista
+                    </div>`;
+                seriesList.appendChild(listItem);
             });
         }
     </script>
 </body>
 </html>
-
