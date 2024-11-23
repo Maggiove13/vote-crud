@@ -46,6 +46,8 @@ app.use(
     })
 );
 
+app.use(Auth.authorization);
+
 app.use('/api', router);
 
 const port = process.env.PORT;
