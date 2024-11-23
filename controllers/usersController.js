@@ -126,3 +126,7 @@ exports.logout = (req, res) => {
 exports.renderLoginPage = async (req, res) => {
     res.render('login');
 }
+
+exports.renderRegisterPage = async (req, res) => {
+    res.render('register');
+}
