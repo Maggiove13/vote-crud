@@ -122,3 +122,7 @@ exports.logout = (req, res) => {
         res.redirect('/api/login'); 
     });
 };
+
+exports.renderLoginPage = async (req, res) => {
+    res.render('login');
+}
