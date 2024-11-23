@@ -30,7 +30,7 @@ app.use((req, res, next) => {
 });
 
 app.set("view engine", "ejs");
-
+app.use(xss());
 app.use(
     session({
         key: "session_id",
@@ -47,7 +47,6 @@ app.use(
 );
 
 app.use(Auth.authorization);
-
 app.use('/api', router);
 
 const port = process.env.PORT;
