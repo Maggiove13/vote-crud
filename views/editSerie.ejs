@@ -13,6 +13,7 @@
             <form action="/api/series/update/<%= serie.id %>" method="POST" class="max-w-2xl mx-auto bg-white p-6 rounded-lg shadow-md">
                     <input type="hidden" name="serie_id" value="<%= serie.id %>">
                         <div class="mb-4">
+                            <input type="hidden" name="_csrf" value="<%= csrfToken  %>">
                             <label for="title" class="block text-sm font-medium text-gray-700">Título</label>
                             <input type="text" name="title" id="title" value="<%= serie.title %>" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm">
                         </div>
