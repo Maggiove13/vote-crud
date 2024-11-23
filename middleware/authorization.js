@@ -56,3 +56,12 @@ exports.authorization = async (req, res, next) => {
     }
 };
 
+
+exports.requireAdmin = (req, res, next) => {
+    if (req.user.role === 'admin' || req.session && req.session.user && req.session.user.role === 'admin') {
+        console.log("RequireAmin data user:", req.user, "rol:", req.user.role);
+        return next();
+    } else{
+        return res.status(403).json({ message: 'Forbidden: Admin access required' });
+    }
+};
