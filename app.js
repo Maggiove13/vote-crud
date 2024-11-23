@@ -31,6 +31,21 @@ app.use((req, res, next) => {
 
 app.set("view engine", "ejs");
 
+app.use(
+    session({
+        key: "session_id",
+        secret: process.env.SESSION_SECRET,
+        store: sessionStore,
+        resave: false,
+        saveUninitialized: false,
+        cookie: {
+            maxAge: 1000 * 60 * 60 * 24, // 1 día
+            httpOnly: true,
+            sameSite: "strict",
+        },
+    })
+);
+
 app.use('/api', router);
 
 const port = process.env.PORT;
