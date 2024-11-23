@@ -17,11 +17,15 @@ router.post('/series/delete',  Auth.requireAdmin, seriesController.deleteSerie);
 router.post('/series/update/:serie_id',  Auth.requireAdmin, seriesController.updateSerie);
 router.post('/series/seasons/all/:serie_id/vote',  seasonsController.incrementVoteCount);
 
-//----------------->   Rutas para vistas
+//----------------->   Routes for render
 router.get('/series/edit/:serie_id',  Auth.requireAdmin, seriesController.renderEditSeriesPage);
 router.get('/series/ordered', seriesController.orderedSeries);
 router.get('/series/insert',  Auth.requireAdmin, seriesController.renderAddSeriePage);
 router.get('/series/seasons/:serie_id', seasonsController.renderAllSeasons);
+
+// Public routes
+router.get('/series', seriesController.renderSeriesPage);
+router.get('/login', userController.renderLoginPage);
 
 
 module.exports = router;
