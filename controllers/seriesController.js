@@ -134,7 +134,10 @@ exports.incrementVoteCount = async (req, res) => {
     try{
         const updatedSerie = await queryVoteCount(titleUpper);
         console.log(updatedSerie);
-        res.json({ vote_count: updatedSerie[0].vote_count });
+        return res.json({
+            vote_count: updatedSerie[0].vote_count,
+            csrfToken: req.csrfToken()
+        });;
         
     } catch(error){
         console.error("Error incrementando el contador de votos:", error);
@@ -146,7 +149,7 @@ exports.incrementVoteCount = async (req, res) => {
 exports.renderSeriesPage = async (req, res) => {
     try {
         const allSeries = await queryGetSeriesOrderByVotes();
-        console.log("All the series:", allSeries);
+
         res.render("index", {allSeries});
     } catch (error) {
         console.error("Error while rendering the page:", error);
@@ -160,13 +163,13 @@ exports.renderEditSeriesPage = async (req, res) => {
     console.log("Serie id for update:", serie_id);
     try {
         const serie = await querySerieById(serie_id);
-        console.log("Datos de objeto serie:", serie);
+        //console.log("Datos de objeto serie:", serie);
         
         if (!serie) {
             return res.status(404).json("Serie no encontrada");
         }
         
-        res.render('editSerie', { serie });
+        res.render('editSerie', { serie, csrfToken: req.csrfToken() });
     } catch (error) {
         console.error("Error loading the edition page:", error);
         return res.status(500).json("Error updating the serie", serie_id);
@@ -175,14 +178,14 @@ exports.renderEditSeriesPage = async (req, res) => {
 
 
 exports.renderAddSeriePage = (req, res) => {
-    res.render('addSeries'); 
+    res.render('addSeries', { csrfToken: req.csrfToken() }); 
 };
 
 
 exports.orderedSeries = async (req, res) => {
     try {
         const seriesList = await queryGetSeriesOrderByVotes(); 
-        console.log("Datos de objeto serie:", seriesList);
+        //console.log("Datos de objeto serie:", seriesList);
         
         if (!seriesList || seriesList.length === 0) {
             return res.status(404).json({ message: "No se encontraron series" });
@@ -190,7 +193,7 @@ exports.orderedSeries = async (req, res) => {
             return res.json(seriesList); 
         }
     } catch (error) {
-        console.error("Error ordenando las series:", error);
-        return res.status(500).json({ message: "Error al ordenar las series", error: error.message }); // Más detalles sobre el error
+        console.error("Error ordenando las series controller:", error);
+        return res.status(500).json({ message: "Error al ordenar las series en controller", error: error.message });
     }
 };
