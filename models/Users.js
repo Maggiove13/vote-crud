@@ -14,7 +14,17 @@ exports.queryInsertUser = async(user_name, email, password, role) => {
 }
 
 
+exports.queryVerifyUser = async(email) => {
+    const query = 'SELECT * FROM users WHERE email = ?';
 
+    try{
+        const [ response ] = await pool.execute(query, [email]);
+        return response;
+    } catch(error){
+        console.error("Error in queryVerifyUser:", error);
+        throw error;
+    }
+}
 
 
 
