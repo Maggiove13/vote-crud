@@ -5,7 +5,7 @@ const seasonsController = require('../controllers/seasonsController');
 const userController = require('../controllers/usersController.js');
 const Auth = require('../middleware/authorization.js');
 
-
+// Public routes for post
 router.post('/register', userController.registerUser );
 router.post('/login', Auth.limiter, userController.login);
 router.post('/logout', userController.logout);
