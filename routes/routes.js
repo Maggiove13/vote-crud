@@ -26,6 +26,6 @@ router.get('/series/seasons/:serie_id', seasonsController.renderAllSeasons);
 // Public routes
 router.get('/series', seriesController.renderSeriesPage);
 router.get('/login', userController.renderLoginPage);
-
+router.get('/register', userController.renderRegisterPage);
 
 module.exports = router;
