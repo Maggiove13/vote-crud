@@ -4,7 +4,6 @@ const session = require("express-session");
 const MySQLStore = require("express-mysql-session")(session);
 
 
-// Opciones personalizadas para mapear la tabla
 const options = {
     schema: {
         tableName: "sessions", 
