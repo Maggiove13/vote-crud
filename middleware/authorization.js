@@ -65,3 +65,11 @@ exports.requireAdmin = (req, res, next) => {
         return res.status(403).json({ message: 'Forbidden: Admin access required' });
     }
 };
+
+
+exports.limiter = rateLimit({
+    windowMs: 5 * 60 * 1000, // 5 minutes
+    limit: 5, // each IP can make up to 10 requests per `windowsMs` (5 minutes)
+    headers: false, // add the `RateLimit-*` headers to the response
+    message: "Failed to login too many times"
+});
