@@ -24,7 +24,6 @@ exports.renderAllSeasons = async (req, res) => {
     
     try {
         const seasons = await seasonsModels.queryGetAllSeasons(serie_id);
-        console.log("Datos de objeto seasons:", seasons);
         
         if (!seasons || seasons.length === 0) {
             return res.status(404).send("seasons from that id not found");
